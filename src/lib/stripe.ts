@@ -1,20 +1,36 @@
-const STRIPE_KEY = import.meta.env.STRIPE_KEY as string | undefined;
-
 // In-memory cache
 let cachedProducts: any[] | null = null;
 let lastFetched = 0;
 const CACHE_TTL = 1000 * 60 * 10; // 10 minutes
 
-async function stripeFetch(path: string, init?: RequestInit) {
-  if (!STRIPE_KEY) {
-    throw new Error('Missing STRIPE_KEY environment variable');
-  }
+/**
+ * Resolve the Stripe secret key.
+ * On Cloudflare Pages the key lives in the runtime env bindings,
+ * NOT in import.meta.env (which is only populated at build time
+ * for non-PUBLIC_ vars). We try multiple sources so it works
+ * everywhere: Cloudflare, Vercel, Node, and local dev.
+ */
+export function resolveStripeKey(runtimeEnv?: Record<string, unknown>): string {
+  const key =
+    runtimeEnv?.STRIPE_KEY as string | undefined   // Cloudflare runtime binding
+    ?? (typeof process !== 'undefined' ? (process.env as any).STRIPE_KEY : undefined)  // Node / Vercel
+    ?? import.meta.env?.STRIPE_KEY;                // Vite dev (.env file)
 
+  if (!key) {
+    throw new Error(
+      'Missing STRIPE_KEY – make sure it is set as an env var / secret '
+      + 'in your deployment platform AND in .env for local dev.'
+    );
+  }
+  return key as string;
+}
+
+async function stripeFetch(stripeKey: string, path: string, init?: RequestInit) {
   const url = `https://api.stripe.com/v1${path}`;
   const res = await fetch(url, {
     ...init,
     headers: {
-      Authorization: `Bearer ${STRIPE_KEY}`,
+      Authorization: `Bearer ${stripeKey}`,
       ...(init?.headers as Record<string, string> | undefined),
     },
   });
@@ -35,7 +51,7 @@ async function stripeFetch(path: string, init?: RequestInit) {
   return json;
 }
 
-export async function getProductData() {
+export async function getProductData(stripeKey: string) {
   const now = Date.now();
 
   // If cache is still valid, serve it
@@ -46,7 +62,7 @@ export async function getProductData() {
 
   // Otherwise, fetch fresh from Stripe using fetch (works on Edge/Cloudflare)
   console.log('Fetching product metadata from Stripe (fetch)...');
-  const productsResp = await stripeFetch('/products?limit=100');
+  const productsResp = await stripeFetch(stripeKey, '/products?limit=100');
   const products = productsResp?.data || [];
 
   const productMetadata = await Promise.all(
@@ -54,7 +70,7 @@ export async function getProductData() {
       let priceObj: any = product.default_price;
 
       if (typeof product.default_price === 'string') {
-        priceObj = await stripeFetch(`/prices/${encodeURIComponent(product.default_price)}`);
+        priceObj = await stripeFetch(stripeKey, `/prices/${encodeURIComponent(product.default_price)}`);
       }
 
       return {
@@ -76,7 +92,7 @@ export async function getProductData() {
   return productMetadata;
 }
 
-export async function validateCartItems(clientItems: { priceId: string; quantity: number }[]) {
+export async function validateCartItems(stripeKey: string, clientItems: { priceId: string; quantity: number }[]) {
   // Validate input structure
   if (!Array.isArray(clientItems) || clientItems.length === 0) {
     throw new Error('Invalid cart items');
@@ -92,7 +108,7 @@ export async function validateCartItems(clientItems: { priceId: string; quantity
 
     let price: any;
     try {
-      price = await stripeFetch(`/prices/${encodeURIComponent(item.priceId)}?expand[]=product`);
+      price = await stripeFetch(stripeKey, `/prices/${encodeURIComponent(item.priceId)}?expand[]=product`);
     } catch (err: any) {
       console.error(`Error retrieving price ${item.priceId}:`, err?.message || err);
       throw new Error('Unable to validate cart items. Please try again.');

@@ -1,12 +1,12 @@
 import type { APIRoute } from 'astro';
-import { validateCartItems } from '../../lib/stripe';
+import { validateCartItems, resolveStripeKey } from '../../lib/stripe';
 export const prerender = false;
 
-const STRIPE_KEY = import.meta.env.STRIPE_KEY as string | undefined;
-
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async (context) => {
   try {
-    if (!STRIPE_KEY) throw new Error('Missing STRIPE_KEY');
+    const runtimeEnv = (context.locals as any)?.runtime?.env;
+    const STRIPE_KEY = resolveStripeKey(runtimeEnv);
+    const { request } = context;
 
     const { lineItems } = await request.json();
 
@@ -14,7 +14,7 @@ export const POST: APIRoute = async ({ request }) => {
       throw new Error('No line items provided');
     }
 
-    const validatedLineItems = await validateCartItems(lineItems);
+    const validatedLineItems = await validateCartItems(STRIPE_KEY, lineItems);
 
     const siteUrl = import.meta.env.PROD 
       ? (import.meta.env.SITE || 'https://www.habtronics.com') 

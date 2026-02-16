@@ -1,10 +1,12 @@
 import type { APIRoute } from 'astro';
-import { getProductData } from '../../lib/stripe';
+import { getProductData, resolveStripeKey } from '../../lib/stripe';
 export const prerender = false;
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async (context) => {
   try {
-    const productMetadata = await getProductData();
+    const runtimeEnv = (context.locals as any)?.runtime?.env;
+    const stripeKey = resolveStripeKey(runtimeEnv);
+    const productMetadata = await getProductData(stripeKey);
 
     const safeProductMetadata = productMetadata.map((product: any) => {
       const { stock, ...safeMetadata } = product.metadata || {};

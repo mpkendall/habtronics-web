@@ -2,6 +2,7 @@
 let cachedProducts: any[] | null = null;
 let lastFetched = 0;
 const CACHE_TTL = 1000 * 60 * 10; // 10 minutes
+export const prerender = false;
 
 /**
  * Resolve the Stripe secret key.

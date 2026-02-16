@@ -5,8 +5,15 @@ import Layout from "../layouts/Layout.astro";
 const sessionID = Astro.url.searchParams.get("session_id");
 if (!sessionID) return Astro.redirect('/shop');
 
-const STRIPE_KEY = import.meta.env.STRIPE_KEY as string | undefined;
-if (!STRIPE_KEY) return Astro.redirect('/shop');
+import { resolveStripeKey } from '../lib/stripe';
+
+let STRIPE_KEY: string;
+try {
+  const runtimeEnv = (Astro.locals as any)?.runtime?.env;
+  STRIPE_KEY = resolveStripeKey(runtimeEnv);
+} catch {
+  return Astro.redirect('/shop');
+}
 
 const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionID)}`, {
   headers: { Authorization: `Bearer ${STRIPE_KEY}` },

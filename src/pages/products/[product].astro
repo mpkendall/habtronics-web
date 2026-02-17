@@ -1,19 +1,15 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getProductData } from "../../lib/stripe";
+import { getProductData, resolveStripeKey } from "../../lib/stripe";
 const productDescriptions = import.meta.glob("../../content/*.{md,mdx}", {
   eager: true,
 });
 
 export const prerender = false;
 
-export const products = await getProductData();
-
-export async function getStaticPaths() {
-  return products.map((product: any) => ({
-    params: { product: product.metadata.short },
-  }));
-}
+const runtimeEnv = (Astro.locals as any)?.runtime?.env;
+const stripeKey = resolveStripeKey(runtimeEnv);
+const products = await getProductData(stripeKey);
 
 const { product } = Astro.params;
 const productData = products.find((p: any) => p.metadata.short === product);

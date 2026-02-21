@@ -1,0 +1,95 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+    <div class="flex flex-col justify-center items-center mx-auto gap-8 max-w-4xl">
+        <h1 class="text-4xl font-bold mb-5">Who We Are</h1>
+        <div class="grid gap-5 grid-cols-3 ">
+            <img src="/images/about/MaxAndSeth.png" alt="Max and Seth" class="w-full" />
+            <p class="text-lg text-left col-span-2">
+                Habtronics is a small family business, started by Max Kendall and Seth Kendall.
+                <br>
+                <br>
+                Max and Seth are also founders of the New England Weather Balloon Society (NEWBS), a club that operates out of the New England Sci-Tech makerspace in Natick, MA. Every year, they train and work with a group of 10-20 students as part of their in-depth StratoScience Lab program, designing and launching electronic high-altitude experiments and presenting their results at the HamXposition conference. NEWBS has also collaborated with many other partners, either flying joint missions or helping them to launch their own.
+            </p>
+        </div>
+        <img src="/images/about/Box05.png" alt="StratoScience Launch" class="w-full" />
+        <p class="text-lg text-left">
+            In addition, Max and Seth teach Arduino robotics classes at New England Sci-Tech, host hackathons, are active in both the Sci-Tech Amateur Radio Society and the New England amateur radio community, and operate a NEWBS Discord server for the wider high altitude balloon community. Please visit the <a href="https://nescitech.org/newbs" target="_blank" class="underline cursor-pointer">NEWBS website</a> for info on how to join.
+        </p>
+        <p class="text-lg text-left">
+            Max is always happy to give talks to the amateur radio community and loves inspiring others to pursue high-altitude balloon projects, learn embedded design, design their own PCBs, and work with radio frequency electronics. We look forward to growing our community with you through Habtronics.
+        </p>
+        <!--  -->
+        <h1 class="text-4xl font-bold mb-5">Our Story</h1>
+        <p class="text-lg text-left">
+            One fall morning, 9-year-old Max Kendall, bored and curious, started attaching paper clips to a small helium party balloon, just to see how many grams of lifting force it had.
+        </p>
+        <p class="text-lg text-left">
+            After finding the results somewhat disappointing, Max found a slightly bigger balloon online and tried it again. Obsessed with Arduinos and Raspberry Pis, his goal quickly became to lift an electronic payload and take pictures from high in the air. A couple months later, Max was launching a small meteorological balloon with a Raspberry Pi that he had programmed to take photos with a camera every 10 seconds. Many party store helium tanks were used, but 20 seconds after lift off, family cheering, it slowly drifted back down to the ground in a neighboring field. After an emergency run to Walmart for one more tank, and a very careful top off to the balloon, it was released and sailed off and away.
+        </p>
+
+        <div class="grid grid-cols-3 gap-3 w-full">
+            <img src="/images/about/Max_9yearsold_PiCamTest.jpg" alt="Programming first payload" class="w-full" />
+            <img src="/images/about/Max_1stBalloon02.jpg" alt="First weather balloon launch" class="w-full" />
+            <img src="/images/about/Max_NewsArticle.jpg" alt="News article about weather balloon launch" class="w-full" />
+        </div>
+
+        <p class="text-lg text-left">
+            Excitedly watching his tracking app for the cheap, off-the-shelf cellular tracker, he was devastated when the balloon lost all signal at 13,000 ft. It was never seen again…
+        </p>
+
+        <p class="text-lg text-left">
+            Undeterred, Max took to the internet and discovered there were other amateurs who were launching high-altitude balloons out there! He found that amateur radio operators were using homemade DIY APRS transmitters to track their balloons over 100,000 ft. and back reliably. He located a nearby makerspace that offered amateur radio classes. He signed up immediately, took the course, and passed the exam.
+        </p>
+
+        <div class="grid grid-cols-3 gap-3 w-full">
+            <img src="/images/about/Max_10yearsold_radio01.jpg" alt="Max using an HT radio" class="w-full" />
+            <img src="/images/about/Max_10yearsold_radio02.jpg" alt="Max at a radio shack" class="w-full" />
+            <img src="/images/about/APRS_02.jpg" alt="First APRS tracker" class="w-full" />
+        </div>
+
+        <p class="text-lg text-left">
+            Right away, he started building DIY Arduino-based APRS transmitters, following along with various open source projects on GitHub. This started a series of launches over the next 6 years. Sometimes the APRS trackers were successful, sometimes they failed, but all proved a learning experience, and thanks to always flying multiple redundant trackers, not one balloon was lost after the first.
+        </p>
+        <p class="text-lg text-left">
+            Eventually, through hard work and growing connections with the amateur high altitude balloon community, especially one influential mentor at Cornell University, not only did Max's PCB design and engineering skills improve, but he was introduced to a new method of tracking high altitude balloons being spearheaded by the Project Horus group in Australia.
+        </p>
+        <p class="text-lg text-left">
+            These bold amateur radio experimenters were tracking government weather balloon radiosondes, recovering them, and reflashing them with firmware that allowed them to transmit on the ham radio 70cm band, and making all the software available open source to the community.
+        </p>
+        <p class="text-lg text-left">
+            Max built a receiver, started recovering radiosondes of his own, reflashing them and flying them with this new Horus Binary protocol. He discovered this new protocol solves many, if not all, the problems with the APRS protocol, and began learning everything he could about it. He started giving talks evangelizing it within the amateur radio community.
+        </p>
+
+        <div class="grid grid-cols-3 gap-3 w-full">
+            <img src="/images/about/Radiosonde01.png" alt="Radiosonde recovery in cranberry bog" class="w-full" />
+            <img src="/images/about/Radiosonde03.png" alt="Radiosonde recovery in forest" class="w-full" />
+            <img src="/images/about/Radiosonde02.png" alt="Unboxing of a radiosonde" class="w-full" />
+        </div>
+
+        <p class="text-lg text-left">
+            Eager to build a new transmitter design of his own, and inspired by the tech used in radiosondes, the Horus Binary protocol, extensible maker-friendly Arduino boards, and a growing need from friends working with rockets for a smaller form-factor transmitter, Max started on the first generation of the Tiny4FSK tracker.
+        </p>
+
+        <div class="grid grid-cols-3 gap-3 w-full">
+            <img src="/images/about/Tiny4FSK02.png" alt="Tiny4FSK breadboard prototype" class="w-full" />
+            <img src="/images/about/Max_working05.png" alt="Soldering of Tiny4FSK boards" class="w-full" />
+            <img src="/images/about/Tiny4FSK03.png" alt="Test of first-version Tiny4FSKs" class="w-full" />
+        </div>
+
+        <p class="text-lg text-left">
+            The need for such a small form factor required learning new skills and tackling new challenges. After years of iterative versions, countless hours spent working in PCB design software, soldering microscopic components, programming, simulating, launching and recovering payloads, and forming relationships with professional PCB manufacturing companies, the Tiny4FSK transmitter has finally achieved its original vision, even outperforming other high altitude trackers on the amateur radio market.
+        </p>
+        <p class="text-lg text-left">
+            Like most of Max's projects, it remains fully open source and has been successfully flown on many high-altitude balloon flights and a small number of rocket launches. It has been used on missions flown by MIT, RIT, Kopernik Observatory, and NEWBS, and we are excited to finally make it available for the first time to the wider amateur radio community.
+        </p>
+
+        <img src="/images/about/Tiny4FSK_Cinematic.png" alt="Tiny4FSK Transmitter" class="w-full" />
+
+        <p class="text-lg text-left">
+            While Tiny4FSK is continually being updated and improved, we are now also developing a number of other exciting products and services meant to help researchers, hobbyists, makers, and radio operators do valuable and exciting work in the high-altitude environments of our planet.
+        </p>
+    </div>
+</Layout>

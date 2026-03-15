@@ -20,7 +20,7 @@ export default defineConfig({
 
   integrations: [mdx()],
 
-  adapter: cloudflare(),
+  adapter: cloudflare({ imageService: "compile" }),
 
   markdown: {
     remarkPlugins: [remarkGfm],

@@ -6,7 +6,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="flex flex-col justify-center items-center mx-auto px-4 sm:px-6">
         <section class="bg-white py-8 md:py-12 w-full">
 			<div class="max-w-5xl mx-auto w-full">
-				<h2 class="text-3xl md:text-5xl font-sora mb-4">Give us a message!</h2>
+                <h1 class="text-3xl md:text-5xl font-sora mb-4">Give us a message!</h1>
 				<p class="text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl">
                     We are always looking for new opportunities to collaborate and share knowledge. If you have any questions, suggestions, or just want to say hi, feel free to reach out! We would love to hear from you.
 				</p>
@@ -15,9 +15,37 @@ import Layout from '../layouts/Layout.astro';
 
         <section class="py-6 md:py-12 w-full">
             <form action="https://formspree.io/f/mjkypnrk" method="POST" class="flex flex-col gap-4 w-full max-w-2xl mx-auto">
-                <input type="text" name="name" placeholder="Your Name" required class="border border-gray-300 rounded-lg px-3 py-3 text-base" />
-                <input type="email" name="email" placeholder="Your Email" required class="border border-gray-300 rounded-lg px-3 py-3 text-base" />
-                <textarea name="message" rows="4" placeholder="Your Message" required class="border border-gray-300 rounded-lg px-3 py-3 text-base"></textarea>
+                <p id="contact-form-help" class="font-inter text-sm text-gray-700">All fields marked with * are required.</p>
+                <label for="contact-name" class="font-inter text-sm text-black">Name <span aria-hidden="true">*</span></label>
+                <input 
+                    id="contact-name"
+                    type="text" 
+                    name="name" 
+                    placeholder="Your Name" 
+                    required 
+                    aria-describedby="contact-form-help"
+                    class="border border-gray-300 rounded-lg px-3 py-3 text-base"
+                />
+                <label for="contact-email" class="font-inter text-sm text-black">Email <span aria-hidden="true">*</span></label>
+                <input 
+                    id="contact-email"
+                    type="email" 
+                    name="email" 
+                    placeholder="Your Email" 
+                    required 
+                    aria-describedby="contact-form-help"
+                    class="border border-gray-300 rounded-lg px-3 py-3 text-base"
+                />
+                <label for="contact-message" class="font-inter text-sm text-black">Message <span aria-hidden="true">*</span></label>
+                <textarea 
+                    id="contact-message"
+                    name="message" 
+                    rows="4" 
+                    placeholder="Your Message" 
+                    required 
+                    aria-describedby="contact-form-help"
+                    class="border border-gray-300 rounded-lg px-3 py-3 text-base"
+                ></textarea>
                 <button type="submit" class="bg-black text-white font-semibold py-3 px-5 mt-2 md:mt-4 rounded-md shadow-md transition hover:opacity-70 min-h-11">Send Message</button>
             </form>
         </section>

@@ -10,15 +10,20 @@ import "../styles/global.css";
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" href="/favicon.ico" type="image/x-icon">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<meta name="generator" content={Astro.generator} />
 		<title>habtronics</title>
-		<link href="https://fonts.googleapis.com/css2?family=Sora&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	</head>
 	<body class="h-full bg-white scroll-smooth">
+		<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[12000] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-white">
+			Skip to main content
+		</a>
 		<Navigation />
-		<div class={`bg-white pt-20 pb-10 min-h-screen ${Astro.props.class ?? ''}`}>
+		<main id="main-content" class={`bg-white pt-20 pb-10 min-h-screen ${Astro.props.class ?? ''}`}>
 			<slot />
-		</div>
+		</main>
 		<Footer />
 	</body>
 </html>

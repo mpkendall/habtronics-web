@@ -10,7 +10,6 @@ interface Props {
 }
 
 const { title, short, price, image, position, priceId } = Astro.props;
-const { origin } = Astro.url;
 ---
 
 <div class="product-card w-full max-w-[320px] md:max-w-[300px] flex flex-col items-center border-2 border-black rounded-2xl p-4 shadow-md bg-white hover:shadow-xl transition-shadow duration-300">
@@ -18,28 +17,19 @@ const { origin } = Astro.url;
 		src={image}
 		class="object-cover w-full max-w-60 h-auto md:h-60 rounded-xl mb-4"
 		style={`object-position: ${position};`}
+		alt={`${title} product image`}
 	/>
 
-	<h1 class="font-inter text-2xl font-semibold text-left mb-2 self-start">{title}</h1>
+	<h3 data-product-title class="font-inter text-2xl font-semibold text-left mb-2 self-start">{title}</h3>
 
 	<div class="w-full flex items-center justify-between mt-auto">
 		<p class="font-inter text-xl font-semibold">${price}</p>
-		<button
-			data-short={short}
-			id="view-page"
-			class="px-4 py-2 min-h-11 border-2 border-black rounded-lg bg-white hover-50 font-inter text-sm transition-all duration-200 cursor-pointer"
+		<a
+			href={`/products/${short}`}
+			class="px-4 py-2 min-h-11 border-2 border-black rounded-lg bg-white hover-50 font-inter text-sm transition-all duration-200 cursor-pointer inline-flex items-center"
+			aria-label={`View details for ${title}`}
 		>
 			View Page
-		</button>
+		</a>
 	</div>
 </div>
-
-<script>
-	const buttons = document.querySelectorAll('#view-page');
-
-	buttons.forEach((button) => {
-		button.addEventListener('click', () => {
-			window.location.href = `${origin}/products/${button.getAttribute("data-short")}`;
-		});
-	});
-</script>

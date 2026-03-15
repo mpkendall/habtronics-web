@@ -1,11 +1,11 @@
 ---
 import "../layouts/Layout.astro"
 ---
-<div class="navbar fixed top-0 w-full min-h-15 bg-white/80 backdrop-blur-md flex items-center z-[10000] shadow-sm transition-all duration-300 px-2 sm:px-3">
+<nav aria-label="Primary" class="navbar fixed top-0 w-full min-h-15 bg-white/80 backdrop-blur-md flex items-center z-[10000] shadow-sm transition-all duration-300 px-2 sm:px-3">
 
     <div class="logo">
         <a href="/">
-            <h1 class="font-sora font-bold text-lg sm:text-xl ml-2 sm:ml-3">habtronics</h1>
+            <span class="font-sora font-bold text-lg sm:text-xl ml-2 sm:ml-3">habtronics</span>
         </a>
     </div>
 
@@ -22,6 +22,7 @@ import "../layouts/Layout.astro"
         class="ml-auto mr-3 h-11 w-11 rounded-md border border-gray-300 bg-white/70 md:hidden"
         aria-label="Open menu"
         aria-expanded="false"
+        aria-controls="mobile-menu"
     >
         <span class="sr-only">Toggle menu</span>
         <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -31,7 +32,7 @@ import "../layouts/Layout.astro"
 
     <div class="cart relative mr-2 sm:mr-5 items-center">
         <a href="/cart" class="grid place-items-center h-11 w-11 rounded-md hover:bg-black/5">
-            <img src="/icons/bag.svg" alt="Cart" class="h-6 w-6 hover-50">
+            <img src="/icons/bag.svg" alt="Cart" loading="lazy" decoding="async" class="h-6 w-6 hover-50">
         </a>
     </div>
 
@@ -47,7 +48,7 @@ import "../layouts/Layout.astro"
             <a href="/contact" class="font-inter py-3 text-lg">Contact</a>
         </div>
     </div>
-</div>
+</nav>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {

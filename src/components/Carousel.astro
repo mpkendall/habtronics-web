@@ -74,6 +74,8 @@ const { title, slides } = Astro.props;
             class="absolute w-full h-full inset-0 object-cover text-neutral-600 dark:text-neutral-300 rounded-2xl md:rounded-[30px]"
             x-bind:src="slide.imgSrc"
             x-bind:alt="slide.imgAlt"
+            loading="lazy"
+            decoding="async"
           />
         </div>
       </template>

@@ -1,39 +1,39 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProductCard from "../components/ProductCard.astro";
+import { getProductData, resolveStripeKey } from "../lib/stripe";
 
 export const prerender = false;
 
 let products = [];
-const { origin } = Astro.url;
+const runtimeEnv = (Astro.locals as any)?.runtime?.env;
 
 try {
-	const response = await fetch(`${origin}/api/retrieve_product_meta`);
-	if (response.ok) {
-		products = await response.json();
-		console.log("Fetched product metadata:", products);
-	} else {
-		console.error("Failed to fetch product metadata:", await response.text());
-	}
+	const stripeKey = resolveStripeKey(runtimeEnv);
+	products = await getProductData(stripeKey);
 } catch (error) {
 	console.error("Error fetching product metadata:", error);
 }
 ---
 
 <Layout>
+	<h1 class="sr-only">Shop</h1>
 	<section class="bg-white py-10 md:py-16">
 		<div class="max-w-[1150px] mx-auto px-4">
 			<!-- Banner -->
 			<div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0 mb-8 md:mb-12">
 				<img
 					src="/logos/habtronics.svg"
+					alt="Habtronics logo"
 					class="h-20 md:h-28 mb-0 md:mr-6"
 				/>
 				<form role="search" id="search-form" onsubmit="return false;" class="w-full md:w-auto">
+					<label for="search-input" class="sr-only">Search products</label>
 					<input
 						type="text"
 						id="search-input"
 						placeholder="Search"
+						aria-label="Search products"
 						class="w-full md:w-80 h-12 px-4 border-2 border-black rounded-md font-inter text-base md:text-lg placeholder:text-base md:placeholder:text-lg placeholder:font-inter focus:outline-none focus:ring-2 focus:ring-black"
 					/>
 				</form>
@@ -74,7 +74,7 @@ try {
 
 			Array.from(products).forEach((product) => {
 				const productElement = product as any;
-				const titleElement = productElement.querySelector("h1");
+				const titleElement = productElement.querySelector("[data-product-title]");
 
 				if (!titleElement) return;
 

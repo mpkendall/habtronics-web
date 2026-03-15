@@ -7,14 +7,14 @@ const resources = await getCollection("resources");
 <footer class="bg-[#F9F6F3] text-sm text-center pt-12 border-t border-gray-200 justify-center">
   <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center px-4 sm:px-6">
       <div class="flex flex-col items-center">
-        <p class="font-bold text-base mb-2">About</p>
+        <h2 class="font-bold text-base mb-2">About</h2>
         <p class="text-sm italic mx-auto max-w-xs">
           “Facilitating open access to upper air environments to pioneer education and research opportunities”
         </p>
-        <img src="/favicon.svg" alt="Logo" class="w-10 mt-3" />
+        <img src="/favicon.svg" alt="Habtronics logo" loading="lazy" decoding="async" class="w-10 mt-3" />
       </div>
       <div class="flex flex-col gap-1">
-        <p class="font-bold text-base mb-2">Links</p>
+        <h2 class="font-bold text-base mb-2">Links</h2>
         <a href="/" class="py-1">Home</a>
         <a href="/shop" class="py-1">Shop</a>
         <a href="/resources" class="py-1">Resources</a>
@@ -22,7 +22,7 @@ const resources = await getCollection("resources");
         <a href="/contact" class="py-1">Contact</a>
       </div>
       <div class="flex flex-col gap-1">
-        <p class="font-bold text-base mb-2">Resources</p>
+        <h2 class="font-bold text-base mb-2">Resources</h2>
         {resources.map((resource) => (
           <a href={`/resources/${resource.slug}`} class="py-1">
             {resource.data.title}
@@ -30,12 +30,12 @@ const resources = await getCollection("resources");
         ))}
       </div>
       <div>
-        <p class="font-bold text-base mb-2">Connect</p>
+        <h2 class="font-bold text-base mb-2">Connect</h2>
         <a href="mailto:info@habtronics.com">info@habtronics.com</a>
       </div>  
     </div>
   
-    <div class="mt-10 text-xs text-gray-500 pb-5">
+    <div class="mt-10 text-xs text-gray-600 pb-5">
       © 2026 HABTRONICS. All rights reserved. <br />
     </div>
 </footer>  

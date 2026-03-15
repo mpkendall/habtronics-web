@@ -6,7 +6,7 @@ import Layout from "../layouts/Layout.astro";
     <div class="flex flex-col justify-center items-center mx-auto gap-8 max-w-4xl px-4 sm:px-6">
         <h1 class="text-3xl md:text-4xl font-bold mb-3 md:mb-5 text-center">Who We Are</h1>
         <div class="grid gap-5 grid-cols-1 md:grid-cols-3">
-            <img src="/images/about/MaxAndSeth.png" alt="Max and Seth" class="w-full" />
+            <img src="/images/about/MaxAndSeth.png" alt="Max and Seth" fetchpriority="high" loading="eager" decoding="async" class="w-full" />
             <p class="text-base md:text-lg text-left md:col-span-2">
                 Habtronics is a small family business, started by Max Kendall and Seth Kendall.
                 <br>
@@ -14,15 +14,15 @@ import Layout from "../layouts/Layout.astro";
                 Max and Seth are also founders of the New England Weather Balloon Society (NEWBS), a club that operates out of the New England Sci-Tech makerspace in Natick, MA. Every year, they train and work with a group of 10-20 students as part of their in-depth StratoScience Lab program, designing and launching electronic high-altitude experiments and presenting their results at the HamXposition conference. NEWBS has also collaborated with many other partners, either flying joint missions or helping them to launch their own.
             </p>
         </div>
-        <img src="/images/about/Box05.png" alt="StratoScience Launch" class="w-full" />
+        <img src="/images/about/Box05.png" alt="StratoScience Launch" loading="lazy" decoding="async" class="w-full" />
         <p class="text-base md:text-lg text-left">
-            In addition, Max and Seth teach Arduino robotics classes at New England Sci-Tech, host hackathons, are active in both the Sci-Tech Amateur Radio Society and the New England amateur radio community, and operate a NEWBS Discord server for the wider high altitude balloon community. Please visit the <a href="https://nescitech.org/newbs" target="_blank" class="underline cursor-pointer">NEWBS website</a> for info on how to join.
+            In addition, Max and Seth teach Arduino robotics classes at New England Sci-Tech, host hackathons, are active in both the Sci-Tech Amateur Radio Society and the New England amateur radio community, and operate a NEWBS Discord server for the wider high altitude balloon community. Please visit the <a href="https://nescitech.org/newbs" target="_blank" rel="noopener noreferrer" class="underline cursor-pointer">NEWBS website<span class="sr-only"> (opens in a new tab)</span></a> for info on how to join.
         </p>
         <p class="text-base md:text-lg text-left">
             Max is always happy to give talks to the amateur radio community and loves inspiring others to pursue high-altitude balloon projects, learn embedded design, design their own PCBs, and work with radio frequency electronics. We look forward to growing our community with you through Habtronics.
         </p>
         <!--  -->
-        <h1 class="text-3xl md:text-4xl font-bold mb-3 md:mb-5 text-center">Our Story</h1>
+        <h2 class="text-3xl md:text-4xl font-bold mb-3 md:mb-5 text-center">Our Story</h2>
         <p class="text-base md:text-lg text-left">
             One fall morning, 9-year-old Max Kendall, bored and curious, started attaching paper clips to a small helium party balloon, just to see how many grams of lifting force it had.
         </p>
@@ -31,9 +31,9 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
-            <img src="/images/about/Max_9yearsold_PiCamTest.jpg" alt="Programming first payload" class="w-full" />
-            <img src="/images/about/Max_1stBalloon02.jpg" alt="First weather balloon launch" class="w-full" />
-            <img src="/images/about/Max_NewsArticle.jpg" alt="News article about weather balloon launch" class="w-full" />
+            <img src="/images/about/Max_9yearsold_PiCamTest.jpg" alt="Programming first payload" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Max_1stBalloon02.jpg" alt="First weather balloon launch" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Max_NewsArticle.jpg" alt="News article about weather balloon launch" loading="lazy" decoding="async" class="w-full" />
         </div>
 
         <p class="text-base md:text-lg text-left">
@@ -45,9 +45,9 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
-            <img src="/images/about/Max_10yearsold_radio01.jpg" alt="Max using an HT radio" class="w-full" />
-            <img src="/images/about/Max_10yearsold_radio02.jpg" alt="Max at a radio shack" class="w-full" />
-            <img src="/images/about/APRS_02.jpg" alt="First APRS tracker" class="w-full" />
+            <img src="/images/about/Max_10yearsold_radio01.jpg" alt="Max using an HT radio" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Max_10yearsold_radio02.jpg" alt="Max at a radio shack" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/APRS_02.jpg" alt="First APRS tracker" loading="lazy" decoding="async" class="w-full" />
         </div>
 
         <p class="text-base md:text-lg text-left">
@@ -64,9 +64,9 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
-            <img src="/images/about/Radiosonde01.png" alt="Radiosonde recovery in cranberry bog" class="w-full" />
-            <img src="/images/about/Radiosonde03.png" alt="Radiosonde recovery in forest" class="w-full" />
-            <img src="/images/about/Radiosonde02.png" alt="Unboxing of a radiosonde" class="w-full" />
+            <img src="/images/about/Radiosonde01.png" alt="Radiosonde recovery in cranberry bog" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Radiosonde03.png" alt="Radiosonde recovery in forest" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Radiosonde02.png" alt="Unboxing of a radiosonde" loading="lazy" decoding="async" class="w-full" />
         </div>
 
         <p class="text-base md:text-lg text-left">
@@ -74,9 +74,9 @@ import Layout from "../layouts/Layout.astro";
         </p>
 
         <div class="grid grid-cols-3 gap-3 w-full">
-            <img src="/images/about/Tiny4FSK02.png" alt="Tiny4FSK breadboard prototype" class="w-full" />
-            <img src="/images/about/Max_working05.png" alt="Soldering of Tiny4FSK boards" class="w-full" />
-            <img src="/images/about/Tiny4FSK03.png" alt="Test of first-version Tiny4FSKs" class="w-full" />
+            <img src="/images/about/Tiny4FSK02.png" alt="Tiny4FSK breadboard prototype" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Max_working05.png" alt="Soldering of Tiny4FSK boards" loading="lazy" decoding="async" class="w-full" />
+            <img src="/images/about/Tiny4FSK03.png" alt="Test of first-version Tiny4FSKs" loading="lazy" decoding="async" class="w-full" />
         </div>
 
         <p class="text-base md:text-lg text-left">
@@ -86,7 +86,7 @@ import Layout from "../layouts/Layout.astro";
             Like most of Max's projects, it remains fully open source and has been successfully flown on many high-altitude balloon flights and a small number of rocket launches. It has been used on missions flown by MIT, RIT, Kopernik Observatory, and NEWBS, and we are excited to finally make it available for the first time to the wider amateur radio community.
         </p>
 
-        <img src="/images/about/Tiny4FSK_Cinematic.png" alt="Tiny4FSK Transmitter" class="w-full" />
+        <img src="/images/about/Tiny4FSK_Cinematic.png" alt="Tiny4FSK Transmitter" loading="lazy" decoding="async" class="w-full" />
 
         <p class="text-lg text-left">
             While Tiny4FSK is continually being updated and improved, we are now also developing a number of other exciting products and services meant to help researchers, hobbyists, makers, and radio operators do valuable and exciting work in the high-altitude environments of our planet.

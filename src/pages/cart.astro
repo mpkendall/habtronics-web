@@ -10,12 +10,13 @@ interface CartItem {
 ---
 
 <Layout>
-  <div class="max-w-5xl mx-auto px-6 py-12 font-inter">
-    <h1 class="text-4xl font-sora mb-8">Your Cart</h1>
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 md:py-12 font-inter">
+    <h1 class="text-3xl md:text-4xl font-sora mb-6 md:mb-8">Your Cart</h1>
 
     <!-- Cart Content -->
     <div id="cart-contents">
-      <table class="w-full border-separate border-spacing-y-2 mb-6">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[680px] border-separate border-spacing-y-2 mb-6">
         <thead>
           <tr>
             <th class="border p-3 bg-[#F3F2EF] text-left text-lg font-semibold">Product</th>
@@ -28,13 +29,14 @@ interface CartItem {
         <tbody id="cart-items">
           <!-- JS will populate rows -->
         </tbody>
-      </table>
+        </table>
+      </div>
 
-      <div class="flex justify-between items-center mt-8">
+      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mt-6 md:mt-8">
         <p class="text-xl font-semibold" id="cart-total">Total: $0.00</p>
         <button
           id="checkout-button"
-          class="bg-white text-black border-2 border-black px-6 py-2 rounded-lg text-sm font-medium hover:opacity-70 transition"
+          class="bg-white text-black border-2 border-black px-6 py-3 min-h-11 rounded-lg text-sm font-medium hover:opacity-70 transition"
         >
           Proceed to Checkout
         </button>

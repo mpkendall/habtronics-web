@@ -7,9 +7,9 @@ const resources = await getCollection("resources");
 
 <Layout>
     <!-- im bored -->
-    <section class="max-w-4xl mx-auto px-4 py-16">
-        <h1 class="text-5xl font-sora mb-4">Resources</h1>
-        <p class="font-inter text-lg text-gray-700 mb-10">
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10 md:py-16">
+        <h1 class="text-3xl md:text-5xl font-sora mb-4">Resources</h1>
+        <p class="font-inter text-base md:text-lg text-gray-700 mb-8 md:mb-10">
             Here's our collection of guides, tutorials, and tools for launching
             and tracking high-altitude balloon missions.
         </p>
@@ -17,10 +17,10 @@ const resources = await getCollection("resources");
         <ul class="space-y-6">
             {
                 resources.map((resource) => (
-                    <li class="bg-white border border-black rounded-xl p-6 transition hover:shadow-md">
+                    <li class="bg-white border border-black rounded-xl p-4 md:p-6 transition hover:shadow-md">
                         <a
                             href={`/resources/${resource.slug}`}
-                            class="text-2xl font-sora text-black hover:underline"
+                            class="text-xl md:text-2xl font-sora text-black hover:underline"
                         >
                             {resource.data.title}
                         </a>
@@ -43,9 +43,9 @@ const resources = await getCollection("resources");
             }
         </ul>
 
-        <div class="mt-16 text-center font-inter text-base text-gray-600">
+        <div class="mt-12 md:mt-16 text-center font-inter text-base text-gray-600">
             Want to contribute a guide or suggest a topic? <a
-                href="/contact-us"
+                href="/contact"
                 class="underline hover:text-blue-600">Get in touch</a
             >.
         </div>

@@ -9,25 +9,36 @@
     --font-sora: "Sora";
 }
 @layer base {
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
     ul {
         list-style-type: disc;
         list-style-position: outside;
         margin-left: 50px;
     }
+
+    img,
+    video {
+        max-width: 100%;
+        height: auto;
+    }
+
     h1 {
-        font-size: 2.5rem;
+        font-size: clamp(2rem, 4.6vw, 2.5rem);
     }
     h2 {
-        font-size: 2rem;
+        font-size: clamp(1.5rem, 3.8vw, 2rem);
     }
     h3 {
-        font-size: 1.75rem;
+        font-size: clamp(1.375rem, 3.1vw, 1.75rem);
     }
     h4 {
-        font-size: 1.5rem;
+        font-size: clamp(1.25rem, 2.6vw, 1.5rem);
     }
     h5 {
-        font-size: 1.25rem;
+        font-size: clamp(1.125rem, 2.2vw, 1.25rem);
     }
     h6 {
         font-size: 1rem;
@@ -40,7 +51,7 @@
 
 @layer components {
     .product-prose {
-        @apply prose prose-xl max-w-none font-inter;
+        @apply prose prose-base md:prose-xl max-w-none font-inter;
     }
 
     .product-prose :where(h1) {

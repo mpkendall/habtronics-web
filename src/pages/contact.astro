@@ -3,25 +3,25 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-    <div class="flex flex-col justify-center items-center mx-auto">
-        <section class="bg-white py-12">
-			<div class="max-w-5xl">
-				<h2 class="text-5xl font-sora mb-4">Give us a message!</h2>
-				<p class="text-lg text-gray-700 leading-relaxed max-w-3xl">
+    <div class="flex flex-col justify-center items-center mx-auto px-4 sm:px-6">
+        <section class="bg-white py-8 md:py-12 w-full">
+			<div class="max-w-5xl mx-auto w-full">
+				<h2 class="text-3xl md:text-5xl font-sora mb-4">Give us a message!</h2>
+				<p class="text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl">
                     We are always looking for new opportunities to collaborate and share knowledge. If you have any questions, suggestions, or just want to say hi, feel free to reach out! We would love to hear from you.
 				</p>
 			</div>
 		</section>
 
-        <section class="py-12">
-            <form action="https://formspree.io/f/mjkypnrk" method="POST" class="flex flex-col gap-4 w-2xl mx-auto">
-                <input type="text" name="name" placeholder="Your Name" required class="border border-gray-300 rounded-lg p-2" />
-                <input type="email" name="email" placeholder="Your Email" required class="border border-gray-300 rounded-lg p-2" />
-                <textarea name="message" rows="4" placeholder="Your Message" required class="border border-gray-300 rounded-lg p-2"></textarea>
-                <button type="submit" class="bg-black text-white font-semibold py-3 px-5 mt-4 rounded-md shadow-md transition hover:opacity-70">Send Message</button>
+        <section class="py-6 md:py-12 w-full">
+            <form action="https://formspree.io/f/mjkypnrk" method="POST" class="flex flex-col gap-4 w-full max-w-2xl mx-auto">
+                <input type="text" name="name" placeholder="Your Name" required class="border border-gray-300 rounded-lg px-3 py-3 text-base" />
+                <input type="email" name="email" placeholder="Your Email" required class="border border-gray-300 rounded-lg px-3 py-3 text-base" />
+                <textarea name="message" rows="4" placeholder="Your Message" required class="border border-gray-300 rounded-lg px-3 py-3 text-base"></textarea>
+                <button type="submit" class="bg-black text-white font-semibold py-3 px-5 mt-2 md:mt-4 rounded-md shadow-md transition hover:opacity-70 min-h-11">Send Message</button>
             </form>
         </section>
 
-        <p class="text-md text-gray-700 leading-relaxed max-w-3xl">Or, send a message to <a href="mailto:info@habtronics.com">info@habtronics.com</a>!</p>
+        <p class="text-sm md:text-md text-gray-700 leading-relaxed max-w-3xl pb-8">Or, send a message to <a href="mailto:info@habtronics.com">info@habtronics.com</a>!</p>
     </div>
 </Layout>

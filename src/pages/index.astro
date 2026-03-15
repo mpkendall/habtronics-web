@@ -2,32 +2,36 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout class="flex flex-col justify-center items-center gap-10">
-	<video
-		src="videos/Habtronics_BannerVideo_withTitle.mp4"
-		autoplay
-		muted
-		loop
-		class="w-[75%] h-auto object-cover rounded-3xl mb-10"
-	></video>
+<Layout class="flex flex-col justify-center items-center gap-5 md:gap-10 pb-6 md:pb-10">
+	<div class="w-full max-w-6xl px-3 sm:px-4 md:px-0">
+		<video
+			src="videos/Habtronics_BannerVideo_withTitle.mp4"
+			autoplay
+			muted
+			loop
+			class="w-full h-auto object-cover rounded-2xl md:rounded-3xl mb-4 md:mb-10"
+		></video>
+	</div>
 
-	<div class="relative w-[75%] group cursor-pointer" role="link" tabindex="0" onclick="location.href='/products/tiny4fsk'" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); location.href='/products/tiny4fsk'; }">
-		<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-black rounded-lg px-4 py-3 z-0">
-			<p class="text-white font-sora font-semibold">FEATURED PRODUCT</p>
-		</div>
-		<img
-			src="/images/Homepage_TinyPanel_noDrawings.png"
-			alt="The Tiny4FSK PCB, a red PCB board held against the sky"
-			class="w-full h-auto object-cover rounded-3xl relative z-10 transition-all duration-300 group-hover:grayscale group-hover:brightness-50"
-		/>
-		<div class="absolute top-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20 transition-all duration-300 group-hover:grayscale">
-			<img src="/logos/Tiny4FSK-Text.svg" alt="Tiny4FSK" class="w-130" />
-			<h2 class="text-black text-4xl font-sora">your next long-range tracker</h2>
-		</div>
-		<div class="absolute inset-0 flex items-center justify-center z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-			<a href="/products/tiny4fsk" class="bg-white text-black font-sora font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-300 transition-colors">
-				Learn More
-			</a>
+	<div class="w-full max-w-6xl px-3 sm:px-4 md:px-0">
+		<div class="relative w-full group cursor-pointer [container-type:inline-size]" role="link" tabindex="0" onclick="location.href='/products/tiny4fsk'" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); location.href='/products/tiny4fsk'; }">
+			<div class="absolute -top-5 md:-top-10 left-1/2 -translate-x-1/2 bg-black rounded-lg px-3 md:px-4 py-2 md:py-3 z-0">
+				<p class="text-white font-sora font-semibold text-[2.6cqw] md:text-base whitespace-nowrap">FEATURED PRODUCT</p>
+			</div>
+			<img
+				src="/images/Homepage_TinyPanel_noDrawings.png"
+				alt="The Tiny4FSK PCB, a red PCB board held against the sky"
+				class="w-full h-auto object-cover rounded-2xl md:rounded-3xl relative z-10 transition-all duration-300 md:group-hover:grayscale md:group-hover:brightness-50"
+			/>
+			<div class="absolute top-[3.2cqw] left-1/2 -translate-x-1/2 flex flex-col items-center gap-[1.1cqw] z-20 transition-all duration-300 md:group-hover:grayscale w-[92%]">
+				<img src="/logos/Tiny4FSK-Text.svg" alt="Tiny4FSK" class="w-[40cqw]" />
+				<h2 class="text-black text-center font-sora leading-tight" style="font-size: 2.5cqw;">your next long-range tracker</h2>
+			</div>
+			<div class="absolute inset-x-0 bottom-3 md:inset-0 flex items-end md:items-center justify-center z-30 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+				<a href="/products/tiny4fsk" class="bg-white text-black font-sora font-semibold px-5 py-2.5 rounded-lg shadow-lg hover:bg-gray-300 transition-colors min-h-11 flex items-center">
+					Learn More
+				</a>
+			</div>
 		</div>
 	</div>
 </Layout>

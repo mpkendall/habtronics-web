@@ -12,8 +12,8 @@ interface Props {
 const { title, slides } = Astro.props;
 ---
 
-<div class="max-w-[1150px] mx-auto flex flex-col items-center px-4">
-  <h2 class="text-4xl font-sora font-extrabold text-left w-full mb-4">
+<div class="max-w-[1150px] mx-auto flex flex-col items-center px-4 sm:px-6">
+  <h2 class="text-3xl md:text-4xl font-sora font-extrabold text-left w-full mb-4">
     {title}
   </h2>
 
@@ -41,7 +41,7 @@ const { title, slides } = Astro.props;
     <!-- Previous button -->
     <button
       type="button"
-      class="absolute left-5 top-1/2 z-20 flex rounded-full -translate-y-1/2 items-center justify-center bg-white/40 p-2 text-neutral-600 transition hover:bg-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:outline-offset-0 dark:bg-neutral-950/40 dark:text-neutral-300 dark:hover:bg-neutral-950/60 dark:focus-visible:outline-white"
+      class="absolute left-2 md:left-5 top-1/2 z-20 flex rounded-full -translate-y-1/2 items-center justify-center bg-white/40 p-2 text-neutral-600 transition hover:bg-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:outline-offset-0 dark:bg-neutral-950/40 dark:text-neutral-300 dark:hover:bg-neutral-950/60 dark:focus-visible:outline-white"
       aria-label="previous slide"
       x-on:click="previous()"
     >
@@ -53,7 +53,7 @@ const { title, slides } = Astro.props;
     <!-- Next button -->
     <button
       type="button"
-      class="absolute right-5 top-1/2 z-20 flex rounded-full -translate-y-1/2 items-center justify-center bg-white/40 p-2 text-neutral-600 transition hover:bg-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:outline-offset-0 dark:bg-neutral-950/40 dark:text-neutral-300 dark:hover:bg-neutral-950/60 dark:focus-visible:outline-white"
+      class="absolute right-2 md:right-5 top-1/2 z-20 flex rounded-full -translate-y-1/2 items-center justify-center bg-white/40 p-2 text-neutral-600 transition hover:bg-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:outline-offset-0 dark:bg-neutral-950/40 dark:text-neutral-300 dark:hover:bg-neutral-950/60 dark:focus-visible:outline-white"
       aria-label="next slide"
       x-on:click="next()"
     >
@@ -63,7 +63,7 @@ const { title, slides } = Astro.props;
     </button>
 
     <!-- Slides -->
-    <div class="relative min-h-[50svh] w-full">
+    <div class="relative min-h-[34svh] md:min-h-[50svh] w-full">
       <template x-for="(slide, index) in slides">
         <div
           x-show="currentSlideIndex == index + 1"
@@ -71,7 +71,7 @@ const { title, slides } = Astro.props;
           x-transition.opacity.duration.1000ms
         >
           <img
-            class="absolute w-full h-full inset-0 object-cover text-neutral-600 dark:text-neutral-300 rounded-[30px]"
+            class="absolute w-full h-full inset-0 object-cover text-neutral-600 dark:text-neutral-300 rounded-2xl md:rounded-[30px]"
             x-bind:src="slide.imgSrc"
             x-bind:alt="slide.imgAlt"
           />

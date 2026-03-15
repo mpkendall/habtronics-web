@@ -24,26 +24,26 @@ const productDesc = Object.values(productDescriptions).find(
 <Layout class="!pb-0">
   <div
     id="product-page"
-    class="-mt-20 grid grid-cols-[25%_75%] w-full min-h-screen"
+    class="-mt-20 grid grid-cols-1 lg:grid-cols-[minmax(280px,32%)_1fr] w-full min-h-screen"
   >
     <div
       id="showcase-section"
-      class="bg-[#1B0C35] min-h-screen flex items-center flex-col"
+      class="bg-[#1B0C35] lg:min-h-screen flex items-center flex-col px-4"
     >
-      <div id="content" class="sticky top-0 flex flex-col items-center w-[300px]">
-        <div class="mt-[80px] mb-5 w-[300px] text-left">
+      <div id="content" class="lg:sticky lg:top-0 flex flex-col items-center w-full max-w-[420px] pb-8 lg:pb-0">
+        <div class="mt-[80px] mb-5 w-full text-left">
           <a href="/shop" class="text-white font-sora text-lg hover-50">&lt; Back to Shop</a>
         </div>
         <img
           src={productData.image}
-          class="w-[80%] object-cover rounded-2xl"
+          class="w-full max-w-[300px] object-cover rounded-2xl"
         />
-        <p class="mt-5 text-white font-sora text-3xl">{productData.name}</p>
-        <div class="flex flex-row items-center gap-10 mt-10">
+        <p class="mt-5 text-white font-sora text-2xl md:text-3xl text-center">{productData.name}</p>
+        <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 mt-8 w-full justify-center">
           <button
             id="add-to-cart"
             class:list={[
-              "font-sora text-lg w-35 h-10 rounded-xl",
+              "font-sora text-lg px-6 min-h-11 rounded-xl",
               stock === 0
                 ? "bg-gray-500 text-black cursor-not-allowed"
                 : "bg-white text-black hover-50 cursor-pointer",
@@ -56,8 +56,8 @@ const productDesc = Object.values(productDescriptions).find(
         </div>
       </div>
     </div>
-    <div id="product-info" class="ml-20 mr-20">
-      <div class="product-prose mt-[100px] pb-15 text-xl">
+    <div id="product-info" class="px-5 md:px-10 lg:px-16">
+      <div class="product-prose mt-[50px] lg:mt-[100px] pb-15 text-base md:text-xl">
         <productDesc.Content />
       </div>
     </div>

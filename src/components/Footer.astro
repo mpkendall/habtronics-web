@@ -5,7 +5,7 @@ const resources = await getCollection("resources");
 ---
 
 <footer class="bg-[#F9F6F3] text-sm text-center pt-12 border-t border-gray-200 justify-center">
-  <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-6 text-center">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center px-4 sm:px-6">
       <div class="flex flex-col items-center">
         <p class="font-bold text-base mb-2">About</p>
         <p class="text-sm italic mx-auto max-w-xs">
@@ -13,18 +13,18 @@ const resources = await getCollection("resources");
         </p>
         <img src="/favicon.svg" alt="Logo" class="w-10 mt-3" />
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-1">
         <p class="font-bold text-base mb-2">Links</p>
-        <a href="/">Home</a>
-        <a href="/shop">Shop</a>
-        <a href="/resources">Resources</a>
-        <a href="/about-us">About</a>
-        <a href="/contact">Contact</a>
+        <a href="/" class="py-1">Home</a>
+        <a href="/shop" class="py-1">Shop</a>
+        <a href="/resources" class="py-1">Resources</a>
+        <a href="/about-us" class="py-1">About</a>
+        <a href="/contact" class="py-1">Contact</a>
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-1">
         <p class="font-bold text-base mb-2">Resources</p>
         {resources.map((resource) => (
-          <a href={`/resources/${resource.slug}`} class="mb-1">
+          <a href={`/resources/${resource.slug}`} class="py-1">
             {resource.data.title}
           </a>
         ))}

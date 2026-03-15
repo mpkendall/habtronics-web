@@ -2,10 +2,6 @@
 export const prerender = false
 
 const PUBLIC_STRIPE_KEY = import.meta.env.PUBLIC_STRIPE_KEY;
-const { origin } = Astro.url;
-
-// Create a placeholder for line items
-let lineItems = [];
 ---
 
 <div id="checkout" data-stripe-key={PUBLIC_STRIPE_KEY}></div>
@@ -24,9 +20,6 @@ let lineItems = [];
   if (lineItems.length === 0) {
     window.location.href = "/shop";
   }
-
-  // Log the line items to verify they are being fetched correctly
-  console.log('Line items from localStorage:', lineItems);
 
   // Fetch session from the server
   async function createCheckoutSession() {
@@ -65,9 +58,6 @@ let lineItems = [];
       }
 
       const session = await createCheckoutSession();
-
-      // Log the session to verify the client secret
-      console.log('Checkout session:', session);
 
       // Set client secret
       checkoutDiv.setAttribute('data-client-secret', session.client_secret);

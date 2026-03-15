@@ -7,6 +7,13 @@
     --font-gugi: "Gugi";
     --font-inter: "Inter";
     --font-sora: "Sora";
+
+    --color-ink-900: oklch(0.23 0.018 276);
+    --color-ink-700: oklch(0.44 0.014 276);
+    --color-cream-50: oklch(0.98 0.008 82);
+    --color-brand-500: oklch(0.61 0.18 24);
+    --color-brand-600: oklch(0.54 0.18 24);
+    --shadow-soft: 0 12px 30px -18px oklch(0.2 0.03 276 / 0.3);
 }
 @layer base {
     *, *::before, *::after {
@@ -47,6 +54,28 @@
         scroll-padding-top: 80px;
         scroll-behavior: smooth;
     }
+
+    body {
+        font-family: var(--font-inter), sans-serif;
+        color: var(--color-ink-900);
+        background: linear-gradient(180deg, oklch(0.99 0.008 82) 0%, oklch(0.985 0.008 82) 100%);
+        line-height: 1.5;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    a,
+    button,
+    input,
+    textarea,
+    select {
+        transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, opacity 180ms ease, transform 180ms ease;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-brand-500);
+        outline-offset: 3px;
+    }
 }
 
 @layer components {
@@ -82,4 +111,21 @@
 
 .navbar-margin {
     margin-top: 20px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .hover-50:hover {
+        opacity: 0.75;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

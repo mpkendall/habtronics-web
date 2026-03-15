@@ -2,7 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout class="flex flex-col justify-center items-center gap-5 md:gap-10 pb-6 md:pb-10">
+<Layout
+	title="Home"
+	description="Open hardware for long-range telemetry and research by HABTronics."
+	class="flex flex-col justify-center items-center gap-5 md:gap-10 pb-6 md:pb-10"
+>
 	<h1 class="sr-only">Habtronics</h1>
 	<div class="w-full max-w-6xl px-3 sm:px-4 md:px-0">
 		<figure class="mb-4 md:mb-10" aria-labelledby="hero-video-heading" aria-describedby="hero-video-description">
@@ -29,8 +33,12 @@ import Layout from "../layouts/Layout.astro";
 	</div>
 
 	<div class="w-full max-w-6xl px-3 sm:px-4 md:px-0">
-		<a href="/products/tiny4fsk" aria-label="Learn more about the Tiny4FSK" class="relative block w-full group cursor-pointer [container-type:inline-size]">
-			<div class="absolute -top-5 md:-top-10 left-1/2 -translate-x-1/2 bg-black rounded-lg px-3 md:px-4 py-2 md:py-3 z-0">
+		<a
+			href="/products/tiny4fsk"
+			aria-label="Learn more about Tiny4FSK"
+			class="relative block w-full group cursor-pointer [container-type:inline-size] rounded-2xl md:rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--color-brand-500)]/30"
+		>
+			<div class="absolute -top-5 md:-top-10 left-1/2 -translate-x-1/2 bg-[oklch(0.28_0.03_280)] rounded-lg px-3 md:px-4 py-2 md:py-3 z-0 shadow-[var(--shadow-soft)]">
 				<p class="text-white font-sora font-semibold text-[2.6cqw] md:text-base whitespace-nowrap">FEATURED PRODUCT</p>
 			</div>
 			<img
@@ -39,21 +47,17 @@ import Layout from "../layouts/Layout.astro";
 				fetchpriority="high"
 				loading="eager"
 				decoding="async"
-				class="w-full h-auto object-cover rounded-2xl md:rounded-3xl relative z-10 transition-all duration-300 md:group-hover:grayscale md:group-hover:brightness-50"
+				class="w-full h-auto object-cover rounded-2xl md:rounded-3xl relative z-10 transition-all duration-300 md:group-hover:grayscale md:group-hover:brightness-60"
 			/>
 			<div class="absolute top-[3.2cqw] left-1/2 -translate-x-1/2 flex flex-col items-center gap-[1.1cqw] z-20 transition-all duration-300 md:group-hover:grayscale w-[92%]">
 				<img src="/logos/Tiny4FSK-Text.svg" alt="Tiny4FSK" loading="lazy" decoding="async" class="w-[40cqw]" />
 				<h2 class="text-black text-center font-sora leading-tight" style="font-size: 2.5cqw;">your next long-range tracker</h2>
 			</div>
 			<div class="absolute inset-x-0 bottom-3 md:inset-0 flex items-end md:items-center justify-center z-30 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-				<span class="bg-white text-black font-sora font-semibold px-5 py-2.5 rounded-lg shadow-lg hover:bg-gray-300 transition-colors min-h-11 flex items-center">
+				<span class="bg-white text-black font-sora font-semibold px-5 py-2.5 rounded-lg shadow-lg hover:bg-black/10 group-active:scale-[0.98] transition-colors min-h-11 flex items-center">
 					Learn More
 				</span>
 			</div>
 		</a>
 	</div>
 </Layout>
-
-<style>
-
-</style>

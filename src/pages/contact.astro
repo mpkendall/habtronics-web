@@ -2,29 +2,30 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
+<Layout title="Contact" description="Get in touch with HABTronics for product questions, collaboration, or support.">
     <div class="flex flex-col justify-center items-center mx-auto px-4 sm:px-6">
         <section class="bg-white py-8 md:py-12 w-full">
 			<div class="max-w-5xl mx-auto w-full">
                 <h1 class="text-3xl md:text-5xl font-sora mb-4">Give us a message!</h1>
-				<p class="text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl">
+				<p class="text-base md:text-lg text-black/80 leading-relaxed max-w-3xl">
                     We are always looking for new opportunities to collaborate and share knowledge. If you have any questions, suggestions, or just want to say hi, feel free to reach out! We would love to hear from you.
 				</p>
 			</div>
 		</section>
 
         <section class="py-6 md:py-12 w-full">
-            <form action="https://formspree.io/f/mjkypnrk" method="POST" class="flex flex-col gap-4 w-full max-w-2xl mx-auto">
-                <p id="contact-form-help" class="font-inter text-sm text-gray-700">All fields marked with * are required.</p>
+            <form action="https://formspree.io/f/mjkypnrk" method="POST" class="flex flex-col gap-4 w-full max-w-2xl mx-auto rounded-2xl border border-black/10 bg-white p-5 md:p-7 shadow-[var(--shadow-soft)]">
+                <p id="contact-form-help" class="font-inter text-sm text-black/70">All fields marked with * are required.</p>
                 <label for="contact-name" class="font-inter text-sm text-black">Name <span aria-hidden="true">*</span></label>
                 <input 
                     id="contact-name"
                     type="text" 
                     name="name" 
                     placeholder="Your Name" 
+                    autocomplete="name"
                     required 
                     aria-describedby="contact-form-help"
-                    class="border border-gray-300 rounded-lg px-3 py-3 text-base"
+                    class="border border-black/20 rounded-lg px-3 py-3 text-base focus-visible:border-[var(--color-brand-500)]"
                 />
                 <label for="contact-email" class="font-inter text-sm text-black">Email <span aria-hidden="true">*</span></label>
                 <input 
@@ -32,24 +33,25 @@ import Layout from '../layouts/Layout.astro';
                     type="email" 
                     name="email" 
                     placeholder="Your Email" 
+                    autocomplete="email"
                     required 
                     aria-describedby="contact-form-help"
-                    class="border border-gray-300 rounded-lg px-3 py-3 text-base"
+                    class="border border-black/20 rounded-lg px-3 py-3 text-base focus-visible:border-[var(--color-brand-500)]"
                 />
                 <label for="contact-message" class="font-inter text-sm text-black">Message <span aria-hidden="true">*</span></label>
                 <textarea 
                     id="contact-message"
                     name="message" 
-                    rows="4" 
+                    rows="5" 
                     placeholder="Your Message" 
                     required 
                     aria-describedby="contact-form-help"
-                    class="border border-gray-300 rounded-lg px-3 py-3 text-base"
+                    class="border border-black/20 rounded-lg px-3 py-3 text-base min-h-32 focus-visible:border-[var(--color-brand-500)]"
                 ></textarea>
-                <button type="submit" class="bg-black text-white font-semibold py-3 px-5 mt-2 md:mt-4 rounded-md shadow-md transition hover:opacity-70 min-h-11">Send Message</button>
+                <button type="submit" class="bg-[oklch(0.28_0.03_280)] text-white font-semibold py-3 px-5 mt-2 md:mt-4 rounded-md shadow-md transition hover:opacity-90 active:scale-[0.98] min-h-11">Send Message</button>
             </form>
         </section>
 
-        <p class="text-sm md:text-md text-gray-700 leading-relaxed max-w-3xl pb-8">Or, send a message to <a href="mailto:info@habtronics.com">info@habtronics.com</a>!</p>
+        <p class="text-sm md:text-base text-black/75 leading-relaxed max-w-3xl pb-8">Or email us directly at <a href="mailto:info@habtronics.com" class="underline decoration-black/40 underline-offset-2 hover:decoration-black">info@habtronics.com</a>.</p>
     </div>
 </Layout>

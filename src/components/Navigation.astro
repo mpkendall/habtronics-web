@@ -1,7 +1,20 @@
 ---
-import "../layouts/Layout.astro"
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/shop", label: "Shop" },
+    { href: "/resources", label: "Resources" },
+    { href: "/about-us", label: "About" },
+    { href: "/contact", label: "Contact" },
+];
+
+const isActivePath = (href: string) =>
+    href === "/"
+        ? currentPath === "/"
+        : currentPath === href || currentPath.startsWith(`${href}/`);
 ---
-<nav aria-label="Primary" class="navbar fixed top-0 w-full min-h-15 bg-white/80 backdrop-blur-md flex items-center z-[10000] shadow-sm transition-all duration-300 px-2 sm:px-3">
+<nav aria-label="Primary" class="navbar fixed top-0 w-full min-h-15 bg-white/88 backdrop-blur-md flex items-center z-[10000] shadow-sm transition-all duration-300 px-2 sm:px-3 border-b border-black/5">
 
     <div class="logo">
         <a href="/">
@@ -9,17 +22,26 @@ import "../layouts/Layout.astro"
         </a>
     </div>
 
-    <div class="links hidden md:flex ml-auto mr-8 gap-8 items-center text-lg" id="nav-links">
-        <a href="/" class="font-inter no-underline hover-50 py-2">Home</a>
-        <a href="/shop" class="font-inter no-underline hover-50 py-2">Shop</a>
-        <a href="/resources" class="font-inter no-underline hover-50 py-2">Resources</a>
-        <a href="/about-us" class="font-inter no-underline hover-50 py-2">About</a>
-        <a href="/contact" class="font-inter no-underline hover-50 py-2">Contact</a>
+    <div class="links hidden md:flex ml-auto mr-8 gap-6 items-center text-lg" id="nav-links">
+        {navLinks.map((link) => (
+            <a
+                href={link.href}
+                aria-current={isActivePath(link.href) ? "page" : undefined}
+                class:list={[
+                    "font-inter no-underline py-2 px-2 rounded-md min-h-11 inline-flex items-center",
+                    isActivePath(link.href)
+                        ? "text-black font-semibold"
+                        : "text-black/80 hover:text-black hover:bg-black/5",
+                ]}
+            >
+                {link.label}
+            </a>
+        ))}
     </div>
 
     <button
         id="hamburger"
-        class="ml-auto mr-3 h-11 w-11 rounded-md border border-gray-300 bg-white/70 md:hidden"
+        class="ml-auto mr-3 h-11 w-11 rounded-md border border-black/15 bg-white/80 md:hidden hover:bg-black/5 active:scale-[0.98]"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -31,21 +53,30 @@ import "../layouts/Layout.astro"
     </button>
 
     <div class="cart relative mr-2 sm:mr-5 items-center">
-        <a href="/cart" class="grid place-items-center h-11 w-11 rounded-md hover:bg-black/5">
+        <a href="/cart" aria-label="Open shopping cart" class="grid place-items-center h-11 w-11 rounded-md hover:bg-black/5 active:scale-[0.98]">
             <img src="/icons/bag.svg" alt="Cart" loading="lazy" decoding="async" class="h-6 w-6 hover-50">
         </a>
     </div>
 
     <div
         id="mobile-menu"
-        class="hidden absolute left-0 top-full w-full border-t border-gray-200 bg-white/95 backdrop-blur-md shadow-md md:hidden"
+        class="hidden absolute left-0 top-full w-full border-t border-black/10 bg-white/95 backdrop-blur-md shadow-md md:hidden"
     >
         <div class="flex flex-col px-4 py-3">
-            <a href="/" class="font-inter py-3 text-lg">Home</a>
-            <a href="/shop" class="font-inter py-3 text-lg">Shop</a>
-            <a href="/resources" class="font-inter py-3 text-lg">Resources</a>
-            <a href="/about-us" class="font-inter py-3 text-lg">About</a>
-            <a href="/contact" class="font-inter py-3 text-lg">Contact</a>
+            {navLinks.map((link) => (
+                <a
+                    href={link.href}
+                    aria-current={isActivePath(link.href) ? "page" : undefined}
+                    class:list={[
+                        "font-inter py-3 px-2 text-lg rounded-md min-h-11 inline-flex items-center",
+                        isActivePath(link.href)
+                            ? "text-black font-semibold bg-black/5"
+                            : "text-black/85 hover:text-black hover:bg-black/5",
+                    ]}
+                >
+                    {link.label}
+                </a>
+            ))}
         </div>
     </div>
 </nav>
@@ -57,17 +88,34 @@ import "../layouts/Layout.astro"
 
         if (!hamburger || !mobileMenu) return;
 
+        const closeMenu = () => {
+            hamburger.setAttribute("aria-expanded", "false");
+            hamburger.setAttribute("aria-label", "Open menu");
+            mobileMenu.classList.add("hidden");
+        };
+
         hamburger.addEventListener("click", () => {
             const isOpen = hamburger.getAttribute("aria-expanded") === "true";
             hamburger.setAttribute("aria-expanded", String(!isOpen));
-            mobileMenu.classList.toggle("hidden");
+            hamburger.setAttribute("aria-label", isOpen ? "Open menu" : "Close menu");
+            mobileMenu.classList.toggle("hidden", isOpen);
         });
 
         mobileMenu.querySelectorAll("a").forEach((link) => {
             link.addEventListener("click", () => {
-                hamburger.setAttribute("aria-expanded", "false");
-                mobileMenu.classList.add("hidden");
+                closeMenu();
             });
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") closeMenu();
+        });
+
+        document.addEventListener("click", (event) => {
+            const target = event.target as Node;
+            if (!mobileMenu.contains(target) && !hamburger.contains(target)) {
+                closeMenu();
+            }
         });
     });
 </script>

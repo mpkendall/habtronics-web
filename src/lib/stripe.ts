@@ -86,6 +86,19 @@ export async function getProductData(stripeKey: string) {
     })
   );
 
+  // Sort products by numeric metadata field `sort_order` or `order` when present.
+  // Lower numbers appear first. If neither field is present, fall back to name.
+  productMetadata.sort((a: any, b: any) => {
+    const ao = Number(a.metadata?.rank ?? NaN);
+    const bo = Number(b.metadata?.rank ?? NaN);
+    const aoValid = !Number.isNaN(ao);
+    const boValid = !Number.isNaN(bo);
+    if (aoValid && boValid) return ao - bo;
+    if (aoValid) return -1;
+    if (boValid) return 1;
+    return (a.name || '').localeCompare(b.name || '');
+  });
+
   // Update cache
   cachedProducts = productMetadata;
   lastFetched = now;

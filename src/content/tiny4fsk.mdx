@@ -36,7 +36,7 @@ Unlike most trackers, Tiny4FSK has an onboard BME280 temperature, pressure, humi
 Tiny has 5 GPIO pins, as well as dedicated I2C and SPI pins for easily adding unique sensors.  Users can modify the open source Arduino code and upload via USB-C.
 
 ## Small and Lightweight
-With the USB breakout snapped off for flight, the Tiny4FSK board only measures 21.5mm x 76.3mm and weighs Xg.  When soldering on the supplied battery clips, it can be powered off either 1 AA or AAA Energizer Ultimate Lithium battery (see battery life expectations), and easily slid inside a rocket fuselage, drone body, hung inline from a high altitude balloon or mounted to a payload box.  Dedicated battery pins can alternately be used to run wires to an external battery, allowing more mounting and battery configurations.
+With the USB breakout snapped off for flight, the Tiny4FSK board only measures 21.5mm x 76.3mm and weighs 4g (not including batteries or clips).  When soldering on the supplied battery clips, it can be powered off either 1 AA or AAA Energizer Ultimate Lithium battery (see battery life expectations), and easily slid inside a rocket fuselage, drone body, hung inline from a high altitude balloon or mounted to a payload box.  Dedicated battery pins can alternately be used to run wires to an external battery, allowing more mounting and battery configurations.
 
 ## Modern GPS module
 Tiny4FSK’s ATGM336H GPS module, together with a chip antenna and impedance matching network, acquires a GPS fix quickly.  At high altitudes, it will often acquire up to 30 satellites, making for more accurate position and altitude. 
@@ -49,39 +49,45 @@ Tiny4FSK has been picked up and decoded from ranges up to 250km. Directional ant
 
 
 <details>
-<summary class="cursor-pointer hover:text-black"> Alternate Tracking Methods </summary>
+<summary class="content-summary"> Alternate Tracking Methods </summary>
 
 Traditional long range telemetry systems used for high altitude balloons, drones, and rockets have a number of problems we sought to eliminate with the development of Tiny4FSK.  
 
-## APRS
+<details>
+<summary class="content-summary text-lg"> APRS </summary>
+
 Automated Packet Reporting System has been the leading protocol used by consumers and hobbyists for tracking high altitude balloons for the last 30 years.  However, it has few problems:
 
-## Frequency pile up
+### Frequency pile up
 APRS uses a standard frequency of 144.390 MHz in order to make use of the widespread APRS i-Gate network. This is a collection of receivers set up to receive telemetry from cars, trucks, weather stations, APRS chat, and users of all kind.  As a result, chances of interference are high, and any two transmitters being used together must be carefully time slotted using code to prevent interfering with each other.  Even though the i-Gate network can be useful for receiving your signals, there will usually not be a station close enough to your payload’s landing site in order to pinpoint the final coordinates for recovery, or one close enough to your launch site for pre-launch testing, thus requiring hobbyists to build their own ground stations anyway.
 
-## Packet Interval
+### Packet Interval
 It is considered common courtesy among the amateur radio community to transmit APRS packets no more often than once per minute on the ground, and often once per 10 minutes at high altitudes.  This leads to less frequent updates than we would like.
 
-## Efficiency
+### Efficiency
 APRS does not have modern protocol features like forward error correction.  This means there is more opportunity for weak signal loss, and therefore more transmit power is needed to achieve range than over protocols.
 
-## Telemetry Fields
+### Telemetry Fields
 APRS does not provide the ability to have formatted fields for sensor data. Any data other than GPS must be squished into the generic comment field and parsed out using custom software to create data plots.
+</details>
 
-## Satellite Trackers
+<details>
+<summary class="content-summary text-lg"> Satellite Trackers </summary>
+
 Some high altitude balloons will use trackers such as the Spot 3 Trace or Iridium network trackers.  While these do not require an amateur radio license, they have significant downsides.
 
-## Price
+### Price
 Typically, they will cost between $300-500 for the unit, and on top of that, require an annual subscription in order to use the satellite network.
 
-## Altitude
+### Altitude
 Typically, these trackers will not provide data above certain altitudes, such as 18km. This means users will essentially lose communication with them for a large portion of the flight, receive no updates, and wait and hope for communication to resume on the descent.
 
-## Weight and Power
+### Weight and Power
 These tracking systems also tend to be significantly heavier and require more power than amateur radio tracking systems.
 
-## Orientation Limitations
+### Orientation Limitations
 These trackers typically need to be oriented correctly upwards in order to communicate with satellites. If a payload turns upside down, the trackers will stop working. This limitation does not exist with amateur radio trackers.
+</details>
 </details>
 <br></br>
 # Make Sure You Know…

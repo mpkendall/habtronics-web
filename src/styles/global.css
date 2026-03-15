@@ -38,6 +38,32 @@
     }
 }
 
+@layer components {
+    .product-prose {
+        @apply prose prose-xl max-w-none font-inter;
+    }
+
+    .product-prose :where(h1) {
+        @apply font-sora text-3xl font-extrabold mb-2;
+    }
+
+    .product-prose :where(h2) {
+        @apply font-inter text-lg font-bold mt-3;
+    }
+
+    .product-prose :where(h3, h4, h5, h6) {
+        @apply font-sora text-lg;
+    }
+
+    .product-prose :where(p) {
+        @apply font-inter text-base;
+    }
+
+    .content-summary {
+        @apply cursor-pointer transition-colors hover:text-black;
+    }
+}
+
 .hover-50:hover {
     opacity: 0.5;
     transition: opacity 0.3s;

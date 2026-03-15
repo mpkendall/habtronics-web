@@ -49,7 +49,7 @@ try {
 			>
 				{products.map((product: any) => (
 					<ProductCard
-						title={product.metadata.title}
+						title={product.metadata.title ?? product.name}
 						short={product.metadata.short}
 						price={product.price}
 						image={product.image}

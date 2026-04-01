@@ -2,10 +2,11 @@
 import { getCollection } from "astro:content";
 
 const resources = await getCollection("resources");
+const legalDocs = await getCollection("legal");
 ---
 
 <footer class="bg-[oklch(0.975_0.01_82)] text-sm text-center pt-12 border-t border-black/10 justify-center">
-  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center px-4 sm:px-6">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 text-center px-4 sm:px-6">
       <div class="flex flex-col items-center">
         <h2 class="font-sora font-bold text-base mb-2">About</h2>
         <p class="text-sm italic text-black/80 mx-auto max-w-xs leading-relaxed">
@@ -26,6 +27,14 @@ const resources = await getCollection("resources");
         {resources.map((resource) => (
           <a href={`/resources/${resource.slug}`} class="py-1 px-1 rounded-md hover:bg-black/5 hover:text-black">
             {resource.data.title}
+          </a>
+        ))}
+      </div>
+      <div class="flex flex-col gap-1">
+        <h2 class="font-sora font-bold text-base mb-2">Legal</h2>
+        {legalDocs.map((doc) => (
+          <a href={`/legal/${doc.slug}`} class="py-1 px-1 rounded-md hover:bg-black/5 hover:text-black">
+            {doc.data.title}
           </a>
         ))}
       </div>

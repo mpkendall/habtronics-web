@@ -79,6 +79,22 @@
 }
 
 @layer components {
+    .content-prose {
+        @apply prose prose-base md:prose-lg max-w-none font-inter;
+    }
+
+    .content-prose :where(h1, h2, h3, h4, h5, h6) {
+        @apply font-sora;
+    }
+
+    .content-prose :where(table) {
+        @apply block w-full overflow-x-auto;
+    }
+
+    .content-prose :where(th) {
+        @apply font-sora;
+    }
+
     .product-prose {
         @apply prose prose-base md:prose-xl max-w-none font-inter;
     }

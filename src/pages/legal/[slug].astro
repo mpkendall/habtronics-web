@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const { slug } = Astro.params;
+const legalDocs = await getCollection("legal");
+const legalDoc = legalDocs.find(
+	(doc) => (doc.slug ?? doc.id.replace(/\.(md|mdx)$/, "")) === slug,
+);
+
+if (!legalDoc) {
+	return Astro.redirect("/404");
+}
+
+const { Content } = await render(legalDoc);
+
+export async function getStaticPaths() {
+	const legalDocs = await getCollection("legal");
+	return legalDocs.map((doc) => ({
+		params: { slug: doc.slug ?? doc.id.replace(/\.(md|mdx)$/, "") },
+	}));
+}
+---
+
+<Layout>
+	<article class="content-prose max-w-4xl mx-auto py-10 px-4">
+		<h1 class="font-sora text-extrabold">{legalDoc.data.title}</h1>
+		<div class="font-inter">
+			<Content />
+		</div>
+	</article>
+</Layout>

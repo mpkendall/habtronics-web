@@ -29,6 +29,8 @@ export const POST: APIRoute = async (context) => {
     body.append('automatic_tax[enabled]', 'true');
     body.append('shipping_address_collection[allowed_countries][]', 'US');
     body.append('allow_promotion_codes', 'true');
+    body.append('shipping_options[0][shipping_rate]', 'shr_1TOLagDPF0HNJL0HFsnwQNDJ');
+    body.append('consent_collection[promotions]', 'auto');
 
     validatedLineItems.forEach((li, i) => {
       body.append(`line_items[${i}][price]`, li.price);

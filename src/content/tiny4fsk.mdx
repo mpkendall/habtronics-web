@@ -9,13 +9,13 @@ title: "Tiny4FSK - The Lightweight Horus Binary Tracker"
 # What is Tiny4FSK?
 Tiny4FSK is a radio transmitter board that sends live telemetry over long distances and altitudes using 4FSK modulation.  It is designed to be used on high altitude balloons, drones, and rockets to receive GPS position, temperature, pressure, and humidity in real time from the ground.
 
-This is an open source project.  Both the code and files to manufacture your own can be found at our github page here:
+This is an open source project.  Both the code and files to manufacture your own can be found at our GitHub page here:
 https://github.com/New-England-Weather-Balloon-Society/Tiny4FSK
 
 We also sell fully assembled boards, along with associated accessories here in the shop.
 
 # What does it come with?
-<img src="/images/TinyPage_WhatItComesWith.png" alt="Tiny4FSK, headers, battery, 2 antennas, SMA connector" class="w-[95%] md:w-[70%] mx-auto block" />
+<img src="/images/TinyPage_WhatItComesWith.png" alt="Tiny4FSK, headers, battery, antenna, SMA connector" class="w-[95%] md:w-[70%] mx-auto block" />
 
 *psst... maybe some stickers as well ^_^*
 
@@ -27,7 +27,7 @@ Tiny4FSK will transmit telemetry reports as fast as every 4 seconds.  This provi
 The Tiny4FSK codebase uses 8 different “channels” or frequencies (near 432 MHz). This pairs with the receiver firmware, which can search for all 8 channels simultaneously.  This means multiple transmitters can be used on the same flight with no time slotting, and a network of properly configured receivers can pick up each other’s flights automatically.
 
 ## Horus Binary Protocol
-Tiny4FSK uses a new, modern protocol called Horus Binary v2, developed open source by Project Horus. It uses the highly efficient 4FSK modulation, and the protocol sports Golay (23,12) Forward Error Correction, which allows it to accurately decode very weak signals.
+Tiny4FSK uses a new, modern protocol called Horus Binary 3, developed open source by Project Horus. It uses the highly efficient 4FSK modulation, and the protocol sports Golay (23,12) Forward Error Correction, which allows it to accurately decode very weak signals.
 
 ## Built in Environmental Sensor
 Unlike most trackers, Tiny4FSK has an onboard BME280 temperature, pressure, humidity sensor, and sends this environmental data in formatted packet fields, which allows for instant plotting in Grafana during the flight.
@@ -92,13 +92,13 @@ These trackers typically need to be oriented correctly upwards in order to commu
 <br></br>
 # Make Sure You Know…
 ## Requires Amateur Radio License with Callsign
-To acheive it’s long range, this transmitter requires an amateur radio callsign.  This allows you to legally transmit on the 70cm ham radio band.  When you download the codebase to flash to the tracker, you will need to open up the configuration file and enter your Callsign.
+To achieve it’s long range, this transmitter requires an amateur radio callsign.  This allows you to legally transmit on the 70cm ham radio band.  When you download the codebase to flash to the tracker, you will need to open up the configuration file and enter your Callsign.
 
 If you are not a licensed amateur radio operator, don’t worry!  It’s easy to become one and get a callsign.  See what’s involved here:
 [How to get your amateur radio license](https://hamstudy.org/content/how)
 
 ## Requires a Receive Station
-While we do have a special all-in-one Habtronics receive station in research and development, for now, using Tiny4FSK does require you to assemble your own receive station.  Don’t worry though!  With just a couple, cheap, off-the-shelf parts, it’s fairly simple for tech-minded tinkerers. You can use either a [laptop and an RTL-SDR](https://github.com/projecthorus/horusdemodlib/wiki/1.1-Horus-GUI-Reception-Guide-(Windows-Linux-OSX)), or a [Raspberry Pi and RTL-SDR](https://github.com/projecthorus/horusdemodlib/wiki/1.2--Raspberry-Pi-'Headless'-RX-Guide).
+While we do have a special all-in-one Habtronics receive station in research and development, for now, using Tiny4FSK does require you to assemble your own receive station.  Don’t worry though!  With just a couple, cheap, off-the-shelf parts, it’s fairly simple for tech-minded tinkerers. You can use either a [laptop and an RTL-SDR](https://github.com/projecthorus/horusdemodlib/wiki/1.1-Horus-GUI-Reception-Guide-(Windows-Linux-OSX)), [Raspberry Pi and RTL-SDR](https://github.com/projecthorus/horusdemodlib/wiki/1.2--Raspberry-Pi-'Headless'-RX-Guide), or [any browser-enabled device with an RTL-SDR](https://horus.sondehub.org).
 
 # How to Use
 [See our GitHub page](https://mpkendall.com/tiny4fsk) for detailed instructions on how to set up and use Tiny4FSK in the field!

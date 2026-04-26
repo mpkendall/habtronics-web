@@ -24,7 +24,7 @@ We also sell fully assembled boards, along with associated accessories here in t
 Tiny4FSK will transmit telemetry reports as fast as every 4 seconds.  This provides much more real time, granular data over the course of a flight and landing than most trackers.
 
 ## Frequencies
-The Tiny4FSK codebase uses 8 different “channels” or frequencies (near 432 MHz). This pairs with the receiver firmware, which can search for all 8 channels simultaneously.  This means multiple transmitters can be used on the same flight with no time slotting, and a network of properly configured receivers can pick up each other’s flights automatically.
+The Tiny4FSK codebase allows the use of arbitrary UHF frequencies. This can be paired with the eight-way decoding script for horusdemodlib to track several trackers or flights at once.
 
 ## Horus Binary Protocol
 Tiny4FSK uses a new, modern protocol called Horus Binary 3, developed open source by Project Horus. It uses the highly efficient 4FSK modulation, and the protocol sports Golay (23,12) Forward Error Correction, which allows it to accurately decode very weak signals.

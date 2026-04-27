@@ -5,6 +5,12 @@ const PUBLIC_STRIPE_KEY = import.meta.env.PUBLIC_STRIPE_KEY;
 ---
 
 <div id="checkout" data-stripe-key={PUBLIC_STRIPE_KEY}></div>
+<div
+  id="checkout-error"
+  class="hidden mt-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800"
+  role="alert"
+  aria-live="polite"
+></div>
 
 <script>
   import { loadStripe } from '@stripe/stripe-js';
@@ -33,9 +39,17 @@ const PUBLIC_STRIPE_KEY = import.meta.env.PUBLIC_STRIPE_KEY;
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Failed to create checkout session:', errorText);
-        throw new Error('Failed to create checkout session');
+        let errorMessage = 'Failed to create checkout session.';
+        try {
+          const errorData = await response.json();
+          if (errorData?.error) {
+            errorMessage = errorData.error;
+          }
+        } catch {
+          // Keep default message when response body is not valid JSON.
+        }
+
+        throw new Error(errorMessage);
       }
 
       return await response.json();
@@ -52,7 +66,12 @@ const PUBLIC_STRIPE_KEY = import.meta.env.PUBLIC_STRIPE_KEY;
         throw new Error('Checkout div not found');
       }
 
-      const stripe = await loadStripe(checkoutDiv.getAttribute('data-stripe-key')!);
+      const stripeKey = checkoutDiv.getAttribute('data-stripe-key');
+      if (!stripeKey) {
+        throw new Error('Stripe publishable key is missing');
+      }
+
+      const stripe = await loadStripe(stripeKey);
       if (!stripe) {
         throw new Error('Failed to load Stripe');
       }
@@ -70,6 +89,15 @@ const PUBLIC_STRIPE_KEY = import.meta.env.PUBLIC_STRIPE_KEY;
       checkout.mount('#checkout');
     } catch (error) {
       console.error('Error during checkout initialization:', error);
+      const message = error instanceof Error
+        ? error.message
+        : 'Something went wrong while loading checkout. Please try again.';
+
+      const errorDiv = document.getElementById('checkout-error');
+      if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.remove('hidden');
+      }
     }
   }
 

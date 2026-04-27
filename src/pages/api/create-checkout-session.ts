@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import Stripe from 'stripe';
 import { validateCartItems, resolveStripeKey } from '../../lib/stripe';
 export const prerender = false;
 
@@ -6,6 +7,9 @@ export const POST: APIRoute = async (context) => {
   try {
     const runtimeEnv = (context.locals as any)?.runtime?.env;
     const STRIPE_KEY = resolveStripeKey(runtimeEnv);
+    const stripe = new Stripe(STRIPE_KEY, {
+      apiVersion: '2025-01-27.acacia',
+    });
     const { request } = context;
 
     const { lineItems } = await request.json();
@@ -22,37 +26,45 @@ export const POST: APIRoute = async (context) => {
 
     const cleanSiteUrl = siteUrl.replace(/\/$/, '');
 
-    const body = new URLSearchParams();
-    body.append('ui_mode', 'embedded');
-    body.append('mode', 'payment');
-    body.append('return_url', `${cleanSiteUrl}/return?session_id={CHECKOUT_SESSION_ID}`);
-    body.append('automatic_tax[enabled]', 'true');
-    body.append('shipping_address_collection[allowed_countries][]', 'US');
-    body.append('allow_promotion_codes', 'true');
-    body.append('shipping_options[0][shipping_rate]', 'shr_1TOLagDPF0HNJL0HFsnwQNDJ');
-    body.append('consent_collection[promotions]', 'auto');
-
-    validatedLineItems.forEach((li, i) => {
-      body.append(`line_items[${i}][price]`, li.price);
-      body.append(`line_items[${i}][quantity]`, String(li.quantity));
-    });
-
-    const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${STRIPE_KEY}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+    const session = await stripe.checkout.sessions.create({
+      ui_mode: 'embedded',
+      mode: 'payment',
+      return_url: `${cleanSiteUrl}/return?session_id={CHECKOUT_SESSION_ID}`,
+      automatic_tax: { enabled: true },
+      shipping_address_collection: { allowed_countries: ['US'] },
+      allow_promotion_codes: true,
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 589,
+              currency: 'usd',
+            },
+            display_name: 'USPS Ground Advantage',
+            delivery_estimate: {
+              minimum: {
+                unit: 'business_day',
+                value: 5,
+              },
+              maximum: {
+                unit: 'business_day',
+                value: 7,
+              }
+            }
+          }
+        }
+      ],
+      consent_collection: {
+        promotions: 'auto',
       },
-      body: body.toString(),
+      line_items: validatedLineItems.map((li) => ({
+        price: li.price,
+        quantity: li.quantity,
+      })),
     });
 
-    const data = await res.json();
-    if (!res.ok) {
-      console.error('Stripe checkout.sessions.create error:', data);
-      throw new Error(data.error?.message || 'Failed to create Stripe checkout session');
-    }
-
-    return new Response(JSON.stringify({ client_secret: data.client_secret }), {
+    return new Response(JSON.stringify({ client_secret: session.client_secret }), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {

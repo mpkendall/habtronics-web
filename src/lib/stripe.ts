@@ -1,8 +1,15 @@
+import Stripe from 'stripe';
+
 // In-memory cache
 let cachedProducts: any[] | null = null;
 let lastFetched = 0;
 const CACHE_TTL = 1000 * 60 * 10; // 10 minutes
 export const prerender = false;
+
+export function invalidateProductCache() {
+  cachedProducts = null;
+  lastFetched = 0;
+}
 
 /**
  * Resolve the Stripe secret key.
@@ -26,33 +33,14 @@ export function resolveStripeKey(runtimeEnv?: Record<string, unknown>): string {
   return key as string;
 }
 
-async function stripeFetch(stripeKey: string, path: string, init?: RequestInit) {
-  const url = `https://api.stripe.com/v1${path}`;
-  const res = await fetch(url, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${stripeKey}`,
-      ...(init?.headers as Record<string, string> | undefined),
-    },
+function createStripeClient(stripeKey: string) {
+  return new Stripe(stripeKey, {
+    apiVersion: '2025-01-27.acacia',
   });
-
-  const text = await res.text();
-  let json: any;
-  try {
-    json = text ? JSON.parse(text) : {};
-  } catch (err) {
-    throw new Error(`Stripe returned non-JSON response (${res.status}): ${text}`);
-  }
-
-  if (!res.ok) {
-    const msg = json?.error?.message || JSON.stringify(json) || text;
-    throw new Error(`Stripe API error ${res.status}: ${msg}`);
-  }
-
-  return json;
 }
 
 export async function getProductData(stripeKey: string) {
+  const stripe = createStripeClient(stripeKey);
   const now = Date.now();
 
   // If cache is still valid, serve it
@@ -61,9 +49,12 @@ export async function getProductData(stripeKey: string) {
     return cachedProducts;
   }
 
-  // Otherwise, fetch fresh from Stripe using fetch (works on Edge/Cloudflare)
-  console.log('Fetching product metadata from Stripe (fetch)...');
-  const productsResp = await stripeFetch(stripeKey, '/products?limit=100');
+  // Otherwise, fetch fresh from Stripe using the SDK.
+  console.log('Fetching product metadata from Stripe (sdk)...');
+  const productsResp = await stripe.products.list({
+    limit: 100,
+    expand: ['data.default_price'],
+  });
   const products = productsResp?.data || [];
 
   const productMetadata = await Promise.all(
@@ -71,7 +62,7 @@ export async function getProductData(stripeKey: string) {
       let priceObj: any = product.default_price;
 
       if (typeof product.default_price === 'string') {
-        priceObj = await stripeFetch(stripeKey, `/prices/${encodeURIComponent(product.default_price)}`);
+        priceObj = await stripe.prices.retrieve(product.default_price);
       }
 
       return {
@@ -107,6 +98,8 @@ export async function getProductData(stripeKey: string) {
 }
 
 export async function validateCartItems(stripeKey: string, clientItems: { priceId: string; quantity: number }[]) {
+  const stripe = createStripeClient(stripeKey);
+
   // Validate input structure
   if (!Array.isArray(clientItems) || clientItems.length === 0) {
     throw new Error('Invalid cart items');
@@ -122,7 +115,9 @@ export async function validateCartItems(stripeKey: string, clientItems: { priceI
 
     let price: any;
     try {
-      price = await stripeFetch(stripeKey, `/prices/${encodeURIComponent(item.priceId)}?expand[]=product`);
+      price = await stripe.prices.retrieve(item.priceId, {
+        expand: ['product'],
+      });
     } catch (err: any) {
       console.error(`Error retrieving price ${item.priceId}:`, err?.message || err);
       throw new Error('Unable to validate cart items. Please try again.');

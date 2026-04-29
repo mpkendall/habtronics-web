@@ -9,7 +9,7 @@ export const prerender = false;
 
 const runtimeEnv = (Astro.locals as any)?.runtime?.env;
 const stripeKey = resolveStripeKey(runtimeEnv);
-const products = await getProductData(stripeKey);
+const products = await getProductData(stripeKey, runtimeEnv);
 
 const { product } = Astro.params;
 const productData = products.find((p: any) => p.metadata.short === product);

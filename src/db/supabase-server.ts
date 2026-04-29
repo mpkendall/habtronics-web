@@ -16,11 +16,14 @@ function resolveSupabaseUrl(runtimeEnv?: Record<string, unknown>): string {
 function resolveSupabaseServiceKey(runtimeEnv?: Record<string, unknown>): string {
 	const key =
 		runtimeEnv?.SUPABASE_SERVICE_ROLE_KEY as string | undefined
+		?? runtimeEnv?.SUPABASE_KEY as string | undefined
 		?? (typeof process !== "undefined" ? (process.env as any).SUPABASE_SERVICE_ROLE_KEY : undefined)
-		?? import.meta.env?.SUPABASE_SERVICE_ROLE_KEY;
+		?? (typeof process !== "undefined" ? (process.env as any).SUPABASE_KEY : undefined)
+		?? import.meta.env?.SUPABASE_SERVICE_ROLE_KEY
+		?? import.meta.env?.SUPABASE_KEY;
 
 	if (!key) {
-		throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY environment variable.");
+		throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_KEY) environment variable.");
 	}
 
 	return key;

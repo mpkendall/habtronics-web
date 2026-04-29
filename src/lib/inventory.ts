@@ -1,4 +1,4 @@
-import { supabase } from "../db/supabase.js";
+import { getSupabaseClient } from "../db/supabase.js";
 import { getSupabaseServerClient } from "../db/supabase-server.js";
 
 type ProductRow = {
@@ -25,7 +25,8 @@ function normalizeSlug(slug: string | null | undefined) {
 	return (slug || "").trim().toLowerCase();
 }
 
-export async function getProductsFromSupabase() {
+export async function getProductsFromSupabase(runtimeEnv?: Record<string, unknown>) {
+	const supabase = getSupabaseClient(runtimeEnv);
 	const { data, error } = await supabase
 		.from("products")
 		.select("*")
@@ -39,8 +40,8 @@ export async function getProductsFromSupabase() {
 	return (data ?? []) as ProductRow[];
 }
 
-export async function getProductDataFromSupabase() {
-	const products = await getProductsFromSupabase();
+export async function getProductDataFromSupabase(runtimeEnv?: Record<string, unknown>) {
+	const products = await getProductsFromSupabase(runtimeEnv);
 
 	return products.map((product: ProductRow) => ({
 		id: product.slug,
@@ -56,7 +57,7 @@ export async function getProductDataFromSupabase() {
 	}));
 }
 
-export async function getInventoryStockMap(slugs: string[]) {
+export async function getInventoryStockMap(slugs: string[], runtimeEnv?: Record<string, unknown>) {
 	const normalizedSlugs = Array.from(new Set(slugs.map(normalizeSlug).filter(Boolean)));
 	const stockMap = new Map<string, number>();
 
@@ -64,7 +65,7 @@ export async function getInventoryStockMap(slugs: string[]) {
 		return stockMap;
 	}
 
-	const products = await getProductsFromSupabase();
+	const products = await getProductsFromSupabase(runtimeEnv);
 	for (const product of products) {
 		const slug = normalizeSlug(product.slug);
 		if (normalizedSlugs.includes(slug)) {
@@ -76,8 +77,8 @@ export async function getInventoryStockMap(slugs: string[]) {
 	return stockMap;
 }
 
-export async function getInventoryStock(slug: string, fallbackStock = 0) {
-	const stockMap = await getInventoryStockMap([slug]);
+export async function getInventoryStock(slug: string, fallbackStock = 0, runtimeEnv?: Record<string, unknown>) {
+	const stockMap = await getInventoryStockMap([slug], runtimeEnv);
 	return stockMap.get(normalizeSlug(slug)) ?? fallbackStock;
 }
 
@@ -101,7 +102,7 @@ export async function reserveCheckoutItems(runtimeEnv: Record<string, unknown> |
 		throw new Error("Unable to reserve inventory.");
 	}
 
-	const products = await getProductsFromSupabase();
+	const products = await getProductsFromSupabase(runtimeEnv);
 	const productByPriceId = new Map(products.map((product) => [product.price_id, product]));
 
 	const lineItems: ReservedCheckoutItem[] = normalizedItems.map((item) => {

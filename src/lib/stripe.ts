@@ -98,9 +98,9 @@ async function getBaseProductData(stripeKey: string) {
   return productMetadata;
 }
 
-export async function getProductData(stripeKey: string) {
+export async function getProductData(stripeKey: string, runtimeEnv?: Record<string, unknown>) {
   console.log('Fetching products from Supabase...');
-  const supabaseProducts = await getProductDataFromSupabase();
+  const supabaseProducts = await getProductDataFromSupabase(runtimeEnv);
   const stripe = createStripeClient(stripeKey);
 
   return Promise.all(

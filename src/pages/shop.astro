@@ -10,7 +10,7 @@ const runtimeEnv = (Astro.locals as any)?.runtime?.env;
 
 try {
 	const stripeKey = resolveStripeKey(runtimeEnv);
-	products = await getProductData(stripeKey);
+	products = await getProductData(stripeKey, runtimeEnv);
 } catch (error) {
 	console.error("Error fetching product metadata:", error);
 }

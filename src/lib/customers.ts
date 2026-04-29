@@ -1,4 +1,3 @@
-import { supabase } from "../db/supabase.js";
 import { getSupabaseServerClient } from "../db/supabase-server.js";
 
 type CustomerEntry = {

@@ -1,4 +1,5 @@
 import Stripe from 'stripe';
+import { getInventoryStock, getInventoryStockMap, getProductDataFromSupabase, reserveCheckoutItems } from './inventory';
 
 // In-memory cache
 let cachedProducts: any[] | null = null;
@@ -35,11 +36,11 @@ export function resolveStripeKey(runtimeEnv?: Record<string, unknown>): string {
 
 function createStripeClient(stripeKey: string) {
   return new Stripe(stripeKey, {
-    apiVersion: '2025-01-27.acacia',
+    apiVersion: '2026-04-22.dahlia',
   });
 }
 
-export async function getProductData(stripeKey: string) {
+async function getBaseProductData(stripeKey: string) {
   const stripe = createStripeClient(stripeKey);
   const now = Date.now();
 
@@ -97,55 +98,43 @@ export async function getProductData(stripeKey: string) {
   return productMetadata;
 }
 
-export async function validateCartItems(stripeKey: string, clientItems: { priceId: string; quantity: number }[]) {
+export async function getProductData(stripeKey: string) {
+  console.log('Fetching products from Supabase...');
+  const supabaseProducts = await getProductDataFromSupabase();
   const stripe = createStripeClient(stripeKey);
 
+  return Promise.all(
+    supabaseProducts.map(async (product: any) => {
+      try {
+        const price = await stripe.prices.retrieve(product.price_id);
+        return {
+          ...product,
+          name: product.metadata.title,
+          price: (((price.unit_amount ?? 0) as number) / 100).toFixed(2),
+        };
+      } catch (err) {
+        console.error(`Failed to fetch price for ${product.price_id}:`, err);
+        return {
+          ...product,
+          name: product.metadata.title,
+          price: '0.00',
+        };
+      }
+    })
+  );
+}
+
+export async function validateCartItems(
+  stripeKey: string,
+  clientItems: { priceId: string; quantity: number }[],
+  runtimeEnv?: Record<string, unknown>
+) {
   // Validate input structure
   if (!Array.isArray(clientItems) || clientItems.length === 0) {
     throw new Error('Invalid cart items');
   }
 
-  const validatedLineItems: { price: string; quantity: number }[] = [];
+  const reservation = await reserveCheckoutItems(runtimeEnv, clientItems);
 
-  // Verify each item with fresh data from Stripe (fetch)
-  for (const item of clientItems) {
-    if (!item.priceId || !item.quantity || item.quantity <= 0) {
-      throw new Error('Invalid item data');
-    }
-
-    let price: any;
-    try {
-      price = await stripe.prices.retrieve(item.priceId, {
-        expand: ['product'],
-      });
-    } catch (err: any) {
-      console.error(`Error retrieving price ${item.priceId}:`, err?.message || err);
-      throw new Error('Unable to validate cart items. Please try again.');
-    }
-
-    const product = price.product as any;
-
-    // Stock check
-    if (product?.metadata && 'stock' in product.metadata) {
-      const availableStock = Number(product.metadata.stock);
-      if (isNaN(availableStock)) {
-        console.error(`Invalid stock value for product ${product.id}`);
-        throw new Error(`Stock data error for ${product.name}`);
-      }
-      if (item.quantity > availableStock) {
-        throw new Error(`Sorry, insufficient stock for ${product.name}. Available: ${availableStock}`);
-      }
-    }
-
-    if (!product?.active) {
-      throw new Error(`Product ${product?.name || item.priceId} is no longer available.`);
-    }
-
-    validatedLineItems.push({
-      price: item.priceId,
-      quantity: item.quantity,
-    });
-  }
-
-  return validatedLineItems;
+  return reservation;
 }

@@ -8,7 +8,7 @@ export const POST: APIRoute = async (context) => {
     const runtimeEnv = (context.locals as any)?.runtime?.env;
     const STRIPE_KEY = resolveStripeKey(runtimeEnv);
     const stripe = new Stripe(STRIPE_KEY, {
-      apiVersion: '2025-01-27.acacia',
+      apiVersion: '2026-04-22.dahlia',
     });
     const { request } = context;
 
@@ -18,7 +18,7 @@ export const POST: APIRoute = async (context) => {
       throw new Error('No line items provided');
     }
 
-    const validatedLineItems = await validateCartItems(STRIPE_KEY, lineItems);
+    const { reservationId, lineItems: reservedLineItems } = await validateCartItems(STRIPE_KEY, lineItems, runtimeEnv);
 
     const siteUrl = import.meta.env.PROD 
       ? (import.meta.env.SITE || 'https://www.habtronics.com') 
@@ -27,9 +27,13 @@ export const POST: APIRoute = async (context) => {
     const cleanSiteUrl = siteUrl.replace(/\/$/, '');
 
     const session = await stripe.checkout.sessions.create({
-      ui_mode: 'embedded',
+      ui_mode: 'embedded_page',
       mode: 'payment',
       return_url: `${cleanSiteUrl}/return?session_id={CHECKOUT_SESSION_ID}`,
+      metadata: {
+        reservation_id: reservationId,
+      },
+      client_reference_id: reservationId,
       automatic_tax: { enabled: true },
       shipping_address_collection: { allowed_countries: ['US'] },
       allow_promotion_codes: true,
@@ -58,7 +62,7 @@ export const POST: APIRoute = async (context) => {
       consent_collection: {
         promotions: 'auto',
       },
-      line_items: validatedLineItems.map((li) => ({
+      line_items: reservedLineItems.map((li) => ({
         price: li.price,
         quantity: li.quantity,
       })),

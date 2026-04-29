@@ -26,6 +26,7 @@ if (!res.ok) {
 
 const session = await res.json();
 const { name, email } = session.customer_details || { name: 'Customer', email: '' };
+const isPaid = session.payment_status === 'paid';
 ---
 
 <Layout>
@@ -37,6 +38,4 @@ const { name, email } = session.customer_details || { name: 'Customer', email: '
   </p>
 </Layout>
 
-<script>
-  localStorage.removeItem("cart");
-</script>
+{isPaid && <script is:inline>localStorage.removeItem("cart");</script>}

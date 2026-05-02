@@ -33,7 +33,7 @@ export const POST: APIRoute = async (context) => {
 
 	let event: Stripe.Event;
 	try {
-		event = stripe.webhooks.constructEvent(payload, signature || '', webhookSecret);
+		event = await stripe.webhooks.constructEventAsync(payload, signature || '', webhookSecret);
 	} catch (error: any) {
 		return new Response(JSON.stringify({ error: error?.message || 'Invalid signature' }), { status: 400 });
 	}

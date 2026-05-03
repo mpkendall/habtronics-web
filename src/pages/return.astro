@@ -36,6 +36,9 @@ const isPaid = session.payment_status === 'paid';
   <p class="font-inter text-base text-center">
     We've sent a receipt to {email}.
   </p>
+  <p class="font-inter text-base text-center mt-4">
+    Join our community on <a href="https://discord.gg/yNX8mAnTEy" class="underline text-blue-600 hover:text-blue-800">Discord</a>!
+  </p>
 </Layout>
 
 {isPaid && <script is:inline>localStorage.removeItem("cart");</script>}

@@ -29,6 +29,9 @@ export const POST: APIRoute = async (context) => {
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded_page',
       mode: 'payment',
+      payment_intent_data: {
+        description: "Join our Discord server for additional support and updates: https://discord.gg/yNX8mAnTEy",
+      },
       return_url: `${cleanSiteUrl}/return?session_id={CHECKOUT_SESSION_ID}`,
       metadata: {
         reservation_id: reservationId,

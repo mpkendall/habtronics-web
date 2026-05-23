@@ -15,6 +15,12 @@ type CheckoutItem = {
 	quantity: number;
 };
 
+type ProductVariant = {
+	name?: string;
+	priceId?: string;
+	stock?: number | string | null;
+};
+
 type ReservedCheckoutItem = {
 	price: string;
 	quantity: number;
@@ -84,9 +90,48 @@ export async function getInventoryStock(slug: string, fallbackStock = 0, runtime
 
 export async function reserveCheckoutItems(runtimeEnv: Record<string, unknown> | undefined, clientItems: CheckoutItem[]) {
 	const supabaseServer = getSupabaseServerClient(runtimeEnv);
-	const normalizedItems = clientItems.map((item) => ({
-		price_id: item.priceId,
-		quantity: item.quantity,
+
+	const products = await getProductsFromSupabase(runtimeEnv);
+	const productByPriceId = new Map<string, { title: string; reservationPriceId: string }>();
+
+	for (const product of products) {
+		productByPriceId.set(product.price_id, {
+			title: product.title,
+			reservationPriceId: product.price_id,
+		});
+
+		const variants = Array.isArray(product.metadata?.variants)
+			? (product.metadata.variants as ProductVariant[])
+			: [];
+
+		for (const variant of variants) {
+			if (!variant?.priceId) {
+				continue;
+			}
+
+			productByPriceId.set(variant.priceId, {
+				title: variant.name ? `${product.title} - ${variant.name}` : product.title,
+				reservationPriceId: product.price_id,
+			});
+		}
+	}
+
+	const reservationItems = new Map<string, number>();
+	for (const item of clientItems) {
+		const product = productByPriceId.get(item.priceId);
+		if (!product) {
+			throw new Error(`Product with price ID ${item.priceId} not found.`);
+		}
+
+		reservationItems.set(
+			product.reservationPriceId,
+			(reservationItems.get(product.reservationPriceId) ?? 0) + item.quantity,
+		);
+	}
+
+	const normalizedItems = Array.from(reservationItems.entries()).map(([priceId, quantity]) => ({
+		price_id: priceId,
+		quantity,
 	}));
 
 	const { data, error } = await supabaseServer.rpc("reserve_inventory", {
@@ -102,17 +147,14 @@ export async function reserveCheckoutItems(runtimeEnv: Record<string, unknown> |
 		throw new Error("Unable to reserve inventory.");
 	}
 
-	const products = await getProductsFromSupabase(runtimeEnv);
-	const productByPriceId = new Map(products.map((product) => [product.price_id, product]));
-
-	const lineItems: ReservedCheckoutItem[] = normalizedItems.map((item) => {
-		const product = productByPriceId.get(item.price_id);
+	const lineItems: ReservedCheckoutItem[] = clientItems.map((item) => {
+		const product = productByPriceId.get(item.priceId);
 		if (!product) {
-			throw new Error(`Product with price ID ${item.price_id} not found.`);
+			throw new Error(`Product with price ID ${item.priceId} not found.`);
 		}
 
 		return {
-			price: item.price_id,
+			price: item.priceId,
 			quantity: item.quantity,
 			title: product.title,
 		};

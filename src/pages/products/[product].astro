@@ -14,7 +14,15 @@ const products = await getProductData(stripeKey, runtimeEnv);
 const { product } = Astro.params;
 const productData = products.find((p: any) => p.metadata.short === product);
 
-const stock = Number(productData?.metadata?.stock);
+const variants = productData?.metadata?.variants ?? [];
+const hasVariants = Array.isArray(variants) && variants.length > 0;
+
+// Default to parent product if no variants, otherwise first variant
+const defaultVariant = hasVariants ? variants[0] : null;
+const defaultStock = hasVariants ? defaultVariant.stock : Number(productData?.metadata?.stock);
+const defaultPriceId = hasVariants ? defaultVariant.priceId : productData?.price_id;
+
+const stock = Number(defaultStock);
 console.log("Stock as number:", stock);
 const productDesc = Object.values(productDescriptions).find(
   (p: any) => p.frontmatter.slug === product,
@@ -43,6 +51,23 @@ const productDesc = Object.values(productDescriptions).find(
           alt={`${productData.name} product image`}
         />
         <p class="mt-5 text-white font-sora text-2xl md:text-3xl text-center">{productData.name}</p>
+        
+        {hasVariants && (
+          <div class="w-full mt-6">
+            <label for="variant-select" class="block text-white font-sora text-sm mb-2">Select Option:</label>
+            <select
+              id="variant-select"
+              class="w-full px-4 py-2 rounded-lg bg-white text-black font-inter focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              {variants.map((variant: any) => (
+                <option value={JSON.stringify({ name: variant.name, stock: variant.stock, priceId: variant.priceId })}>
+                  {variant.name} (${Number(variant.price ?? 0).toFixed(2)})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 mt-8 w-full justify-center">
           <button
             id="add-to-cart"
@@ -56,7 +81,7 @@ const productDesc = Object.values(productDescriptions).find(
           >
             {stock === 0 ? "Out of Stock" : "Add to Cart"}
           </button>
-          <p class="font-sora text-xl text-white">${productData.price}</p>
+          <p id="price-display" class="font-sora text-xl text-white">${productData.price}</p>
         </div>
       </div>
     </div>
@@ -69,7 +94,9 @@ const productDesc = Object.values(productDescriptions).find(
       id="tag-data"
       data-title={productData.name}
       data-price={productData.price}
-      data-price-id={productData.price_id}
+      data-price-id={defaultPriceId}
+      data-variants={hasVariants ? JSON.stringify(variants) : '[]'}
+      data-has-variants={hasVariants.toString()}
     >
     </div>
   </div>
@@ -77,16 +104,57 @@ const productDesc = Object.values(productDescriptions).find(
   <script>
     const addToCartButton = document.getElementById("add-to-cart");
     const dataDiv = document.getElementById("tag-data");
+    const variantSelect = document.getElementById("variant-select");
+    const priceDisplay = document.getElementById("price-display");
+
+    function updateFromVariant() {
+      if (variantSelect) {
+        const selected = JSON.parse(variantSelect.value);
+        const variants = JSON.parse(dataDiv!.getAttribute("data-variants") || "[]");
+        const variant = variants.find((v: any) => v.priceId === selected.priceId);
+        
+        if (variant) {
+          dataDiv!.setAttribute("data-price-id", variant.priceId);
+          priceDisplay!.textContent = `$${Number(variant.price ?? 0).toFixed(2)}`;
+          
+          // Update button state
+          if (variant.stock === 0) {
+            addToCartButton!.disabled = true;
+            addToCartButton!.textContent = "Out of Stock";
+            addToCartButton!.classList.remove("bg-white", "hover-50", "cursor-pointer");
+            addToCartButton!.classList.add("bg-gray-500", "cursor-not-allowed");
+          } else {
+            addToCartButton!.disabled = false;
+            addToCartButton!.textContent = "Add to Cart";
+            addToCartButton!.classList.remove("bg-gray-500", "cursor-not-allowed");
+            addToCartButton!.classList.add("bg-white", "hover-50", "cursor-pointer");
+          }
+        }
+      }
+    }
+
+    if (variantSelect) {
+      variantSelect.addEventListener("change", updateFromVariant);
+    }
 
     if (!addToCartButton?.hasAttribute("disabled")) {
-      addToCartButton?.addEventListener("click", () =>
+      addToCartButton?.addEventListener("click", () => {
+        let title = dataDiv!.getAttribute("data-title")!;
+        const hasVariants = dataDiv!.getAttribute("data-has-variants") === "true";
+        
+        if (hasVariants && variantSelect) {
+          const selected = JSON.parse(variantSelect.value);
+          title = `${title} - ${selected.name}`;
+        }
+
         addToCart(
-          dataDiv!.getAttribute("data-title")!,
-          dataDiv!.getAttribute("data-price")!,
+          title,
+          priceDisplay!.textContent!.replace("$", ""),
           dataDiv!.getAttribute("data-price-id")!,
-        ),
-      );
+        );
+      });
     }
+
     function addToCart(title: any, price: any, priceId: any) {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const productIndex = cart.findIndex(

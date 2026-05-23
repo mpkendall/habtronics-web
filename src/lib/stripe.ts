@@ -101,17 +101,54 @@ async function getBaseProductData(stripeKey: string) {
 export async function getProductData(stripeKey: string, runtimeEnv?: Record<string, unknown>) {
   console.log('Fetching products from Supabase...');
   const supabaseProducts = await getProductDataFromSupabase(runtimeEnv);
+  // Sort Supabase-sourced products by numeric metadata `rank` when provided.
+  // Lower rank values appear first (higher priority).
+  supabaseProducts.sort((a: any, b: any) => {
+    const ao = Number(a.metadata?.rank ?? NaN);
+    const bo = Number(b.metadata?.rank ?? NaN);
+    const aoValid = !Number.isNaN(ao);
+    const boValid = !Number.isNaN(bo);
+    if (aoValid && boValid) return ao - bo;
+    if (aoValid) return -1;
+    if (boValid) return 1;
+    const at = (a.metadata?.title ?? a.id ?? '').toString();
+    const bt = (b.metadata?.title ?? b.id ?? '').toString();
+    return at.localeCompare(bt);
+  });
   const stripe = createStripeClient(stripeKey);
 
   return Promise.all(
     supabaseProducts.map(async (product: any) => {
       try {
         const price = await stripe.prices.retrieve(product.price_id);
-        return {
+        const productData = {
           ...product,
           name: product.metadata.title,
           price: (((price.unit_amount ?? 0) as number) / 100).toFixed(2),
         };
+
+        // Fetch variant prices if they exist
+        if (product.metadata.variants && Array.isArray(product.metadata.variants)) {
+          productData.metadata.variants = await Promise.all(
+            product.metadata.variants.map(async (variant: any) => {
+              try {
+                const variantPrice = await stripe.prices.retrieve(variant.priceId);
+                return {
+                  ...variant,
+                  price: (((variantPrice.unit_amount ?? 0) as number) / 100).toFixed(2),
+                };
+              } catch (err) {
+                console.error(`Failed to fetch price for variant ${variant.priceId}:`, err);
+                return {
+                  ...variant,
+                  price: '0.00',
+                };
+              }
+            })
+          );
+        }
+
+        return productData;
       } catch (err) {
         console.error(`Failed to fetch price for ${product.price_id}:`, err);
         return {

@@ -7,6 +7,7 @@ type ProductRow = {
 	price_id: string;
 	image: string;
 	stock: number | string | null;
+	shipping_rates?: unknown;
 	metadata?: Record<string, any>;
 };
 
@@ -21,11 +22,48 @@ type ProductVariant = {
 	stock?: number | string | null;
 };
 
+type ShippingRate = {
+	name?: string;
+	price?: string | number;
+};
+
+type ResolvedShippingRate = {
+	name: string;
+	amount: number;
+};
+
 type ReservedCheckoutItem = {
 	price: string;
 	quantity: number;
 	title: string;
 };
+
+function normalizeShippingAmount(price: unknown) {
+	const amount = typeof price === "number" ? price : Number(String(price ?? "").trim());
+	return Number.isFinite(amount) ? Math.round(amount) : null;
+}
+
+function getProductShippingRates(product: ProductRow): ResolvedShippingRate[] {
+	const rawShippingRates = product.shipping_rates;
+	const rateEntries = Array.isArray(rawShippingRates)
+		? rawShippingRates
+		: Array.isArray((rawShippingRates as any)?.rates)
+			? (rawShippingRates as any).rates
+			: [];
+
+	return rateEntries
+		.map((rate: ShippingRate) => {
+			const name = typeof rate?.name === "string" ? rate.name.trim() : "";
+			const amount = normalizeShippingAmount(rate?.price);
+
+			if (!name || amount === null) {
+				return null;
+			}
+
+			return { name, amount };
+		})
+		.filter((rate: ResolvedShippingRate | null): rate is ResolvedShippingRate => rate !== null);
+}
 
 function normalizeSlug(slug: string | null | undefined) {
 	return (slug || "").trim().toLowerCase();
@@ -92,12 +130,13 @@ export async function reserveCheckoutItems(runtimeEnv: Record<string, unknown> |
 	const supabaseServer = getSupabaseServerClient(runtimeEnv);
 
 	const products = await getProductsFromSupabase(runtimeEnv);
-	const productByPriceId = new Map<string, { title: string; reservationPriceId: string }>();
+	const productByPriceId = new Map<string, { title: string; reservationPriceId: string; shippingRates: ResolvedShippingRate[] }>();
 
 	for (const product of products) {
 		productByPriceId.set(product.price_id, {
 			title: product.title,
 			reservationPriceId: product.price_id,
+			shippingRates: getProductShippingRates(product),
 		});
 
 		const variants = Array.isArray(product.metadata?.variants)
@@ -112,15 +151,26 @@ export async function reserveCheckoutItems(runtimeEnv: Record<string, unknown> |
 			productByPriceId.set(variant.priceId, {
 				title: variant.name ? `${product.title} - ${variant.name}` : product.title,
 				reservationPriceId: product.price_id,
+				shippingRates: getProductShippingRates(product),
 			});
 		}
 	}
+
+	const shippingRatesByName = new Map<string, ResolvedShippingRate>();
 
 	const reservationItems = new Map<string, number>();
 	for (const item of clientItems) {
 		const product = productByPriceId.get(item.priceId);
 		if (!product) {
 			throw new Error(`Product with price ID ${item.priceId} not found.`);
+		}
+
+		for (const rate of product.shippingRates) {
+			const normalizedName = rate.name.trim().toLowerCase();
+			const currentRate = shippingRatesByName.get(normalizedName);
+			if (!currentRate || rate.amount > currentRate.amount) {
+				shippingRatesByName.set(normalizedName, rate);
+			}
 		}
 
 		reservationItems.set(
@@ -163,6 +213,7 @@ export async function reserveCheckoutItems(runtimeEnv: Record<string, unknown> |
 	return {
 		reservationId,
 		lineItems,
+		shippingRates: Array.from(shippingRatesByName.values()),
 	};
 }
 

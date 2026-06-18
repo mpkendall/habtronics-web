@@ -3,6 +3,54 @@ import Stripe from 'stripe';
 import { validateCartItems, resolveStripeKey } from '../../lib/stripe';
 export const prerender = false;
 
+function buildShippingOptions(shippingRates: Array<{ name: string; amount: number }>) {
+  if (!Array.isArray(shippingRates) || shippingRates.length === 0) {
+    return [
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: {
+            amount: 589,
+            currency: 'usd',
+          },
+          display_name: 'USPS Ground Advantage',
+          delivery_estimate: {
+            minimum: {
+              unit: 'business_day' as const,
+              value: 5,
+            },
+            maximum: {
+              unit: 'business_day' as const,
+              value: 7,
+            }
+          }
+        }
+      }
+    ] as any;
+  }
+
+  return shippingRates.map((rate) => ({
+    shipping_rate_data: {
+      type: 'fixed_amount',
+      fixed_amount: {
+        amount: rate.amount,
+        currency: 'usd',
+      },
+      display_name: rate.name,
+      delivery_estimate: {
+        minimum: {
+            unit: 'business_day' as const,
+          value: 5,
+        },
+        maximum: {
+            unit: 'business_day' as const,
+          value: 7,
+        }
+      }
+    }
+    })) as any;
+}
+
 export const POST: APIRoute = async (context) => {
   try {
     const runtimeEnv = (context.locals as any)?.runtime?.env;
@@ -18,7 +66,7 @@ export const POST: APIRoute = async (context) => {
       throw new Error('No line items provided');
     }
 
-    const { reservationId, lineItems: reservedLineItems } = await validateCartItems(STRIPE_KEY, lineItems, runtimeEnv);
+    const { reservationId, lineItems: reservedLineItems, shippingRates } = await validateCartItems(STRIPE_KEY, lineItems, runtimeEnv);
 
     const siteUrl = import.meta.env.PROD 
       ? (import.meta.env.SITE || 'https://www.habtronics.com') 
@@ -40,28 +88,7 @@ export const POST: APIRoute = async (context) => {
       automatic_tax: { enabled: true },
       shipping_address_collection: { allowed_countries: ['US'] },
       allow_promotion_codes: true,
-      shipping_options: [
-        {
-          shipping_rate_data: {
-            type: 'fixed_amount',
-            fixed_amount: {
-              amount: 589,
-              currency: 'usd',
-            },
-            display_name: 'USPS Ground Advantage',
-            delivery_estimate: {
-              minimum: {
-                unit: 'business_day',
-                value: 5,
-              },
-              maximum: {
-                unit: 'business_day',
-                value: 7,
-              }
-            }
-          }
-        }
-      ],
+      shipping_options: buildShippingOptions(shippingRates),
       consent_collection: {
         promotions: 'auto',
       },
